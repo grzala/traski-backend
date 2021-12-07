@@ -5,6 +5,7 @@ Rails.application.routes.draw do
 
   controller :sessions do
     get '/check_logged_in', action: :check_logged_in, as: :checked_logged_in
+    delete '/session', action: :destroy, as: :logout
   end
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html

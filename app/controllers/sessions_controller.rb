@@ -24,7 +24,7 @@ class SessionsController < ApplicationController
         end
 
 
-        sign_in user, :scope => :user
+        sign_in user
         render :json => {
             :messages => ["Successfully logged in as: " + params[:user][:password]]
         }
@@ -39,11 +39,15 @@ class SessionsController < ApplicationController
     end
 
     def destroy
-        puts "DESTROYNG:"
+        msg = "Already logged out"
 
+        if current_user
+            sign_out current_user
+            msg = "logout successful"
+        end
 
         render :json => {
-            :messages => ["Logout successful"]
+            :messages => [msg]
         }
     end
 end
