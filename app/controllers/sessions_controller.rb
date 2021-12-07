@@ -18,27 +18,32 @@ class SessionsController < ApplicationController
         end
 
         if (error)
-            render :json => {
+            return render :json => {
                 :error_msgs => [error_msg]
             }, :status => 401
-        else
-            render :json => {
-                :notice => "Successfully logged in as: " + params[:user][:password]
-            }
         end
-        
-        # login_as(@user1, :scope => :user)
 
-        # render :json => {
-        #     :asdasdsa => "asdasd"
-        # }, :status => 500
+
+        sign_in user, :scope => :user
+        render :json => {
+            :messages => ["Successfully logged in as: " + params[:user][:password]]
+        }
+        
     end
 
     def check_logged_in
+        render :json => {
+            :logged_in => current_user != nil,
+            :user => current_user
+        }
+    end
+
+    def destroy
+        puts "DESTROYNG:"
 
 
         render :json => {
-            "yoyoyoyo": "yoyoyoyo"
+            :messages => ["Logout successful"]
         }
     end
 end
