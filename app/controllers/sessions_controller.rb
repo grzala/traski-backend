@@ -26,7 +26,8 @@ class SessionsController < ApplicationController
 
         sign_in user
         render :json => {
-            :messages => ["Successfully logged in as: " + params[:user][:password]]
+            :messages => ["Successfully logged in as: " + user.full_name],
+            :user => user
         }
         
     end
@@ -43,7 +44,7 @@ class SessionsController < ApplicationController
 
         if current_user
             sign_out current_user
-            msg = "logout successful"
+            msg = "Logout successful"
         end
 
         render :json => {
