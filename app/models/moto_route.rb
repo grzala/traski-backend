@@ -14,4 +14,13 @@ class MotoRoute < ApplicationRecord
     def coordinates=(coords_obj)
         self.coordinates_json_string = coords_obj.to_json
     end
+
+
+  def serializable_hash(options={})
+    super.merge ({
+      
+        :coordinates => self.coordinates
+      
+    })
+  end
 end

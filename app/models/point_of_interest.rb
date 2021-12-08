@@ -22,7 +22,7 @@ class PointOfInterest < ApplicationRecord
         self.longitude = coordinates[:lng]
     end
 
-    def as_json(options={})
+    def serializable_hash(options={})
       super.merge ({
         
           :coordinates => self.coordinates

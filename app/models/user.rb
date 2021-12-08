@@ -19,7 +19,7 @@ class User < ApplicationRecord
   end
 
 
-  def as_json(options={})
+  def serializable_hash(options={})
     super.merge ({
       
         :full_name => self.full_name

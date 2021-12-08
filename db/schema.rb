@@ -30,8 +30,8 @@ ActiveRecord::Schema.define(version: 2021_12_08_115740) do
   create_table "point_of_interests", force: :cascade do |t|
     t.string "name"
     t.string "description"
-    t.decimal "latitude"
-    t.decimal "longitude"
+    t.float "latitude"
+    t.float "longitude"
     t.integer "variant", default: 0
     t.integer "moto_route_id"
     t.datetime "created_at", precision: 6, null: false
