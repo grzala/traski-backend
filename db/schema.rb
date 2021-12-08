@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_08_115740) do
+ActiveRecord::Schema.define(version: 2021_12_08_192119) do
+
+  create_table "moto_route_favourites", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "moto_route_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["moto_route_id"], name: "index_moto_route_favourites_on_moto_route_id"
+    t.index ["user_id"], name: "index_moto_route_favourites_on_user_id"
+  end
 
   create_table "moto_routes", force: :cascade do |t|
     t.string "name"
@@ -53,6 +62,8 @@ ActiveRecord::Schema.define(version: 2021_12_08_115740) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "moto_route_favourites", "moto_routes"
+  add_foreign_key "moto_route_favourites", "users"
   add_foreign_key "moto_routes", "users"
   add_foreign_key "point_of_interests", "moto_routes"
 end
