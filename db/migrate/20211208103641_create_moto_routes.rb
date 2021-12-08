@@ -6,7 +6,7 @@ class CreateMotoRoutes < ActiveRecord::Migration[6.1]
       t.string :coordinates_json_string
       t.date :open_start
       t.date :open_end
-      t.integer :time_to_domplete_h
+      t.integer :time_to_complete_h
       t.integer :time_to_complete_m
       t.integer :difficulty
       t.references :user, foreign_key: true
