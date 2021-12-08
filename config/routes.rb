@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'moto_routes/show'
   devise_for :users
 
   resources :sessions, only: [:create] 
