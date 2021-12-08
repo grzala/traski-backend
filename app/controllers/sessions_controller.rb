@@ -19,7 +19,7 @@ class SessionsController < ApplicationController
 
         if (error)
             return render :json => {
-                :error_msgs => [error_msg]
+                :messages => [error_msg]
             }, :status => 401
         end
 
