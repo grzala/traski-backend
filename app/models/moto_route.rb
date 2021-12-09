@@ -28,6 +28,13 @@ class MotoRoute < ApplicationRecord
       votes = MotoRouteVote.where(moto_route: self)
 
       max_score = ((votes.count) * MotoRouteVote::MAX_VOTE_SCORE).to_f
+
+      if max_score <= 0.0 # prevent division by 0 in later parts of the code
+        self.score = 0.0
+        self.save
+        return
+      end
+
       total_score = 0.0
       votes.each do |vote|
         total_score += vote.score.to_f
@@ -56,11 +63,15 @@ class MotoRoute < ApplicationRecord
   def serializable_hash(options={})
     to_return = super.merge ({
         :coordinates => self.coordinates,
+        :score => self.score
     })
     
     if options[:with_user]
+      users_vote = MotoRouteVote.find_by(user: options[:with_user], moto_route: self)
+      users_vote = users_vote.score if users_vote != nil
       to_return.merge! ({
-          :is_favourite => self.is_favourite?(options[:with_user])
+          :is_favourite => self.is_favourite?(options[:with_user]),
+          :your_vote => users_vote
       })
     end
 
