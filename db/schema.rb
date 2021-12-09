@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_08_192119) do
+ActiveRecord::Schema.define(version: 2021_12_09_125334) do
 
   create_table "moto_route_favourites", force: :cascade do |t|
     t.integer "user_id"
@@ -19,6 +19,16 @@ ActiveRecord::Schema.define(version: 2021_12_08_192119) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["moto_route_id"], name: "index_moto_route_favourites_on_moto_route_id"
     t.index ["user_id"], name: "index_moto_route_favourites_on_user_id"
+  end
+
+  create_table "moto_route_votes", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "moto_route_id"
+    t.integer "score"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["moto_route_id"], name: "index_moto_route_votes_on_moto_route_id"
+    t.index ["user_id"], name: "index_moto_route_votes_on_user_id"
   end
 
   create_table "moto_routes", force: :cascade do |t|
@@ -33,6 +43,7 @@ ActiveRecord::Schema.define(version: 2021_12_08_192119) do
     t.integer "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.float "score", default: 0.0
     t.index ["user_id"], name: "index_moto_routes_on_user_id"
   end
 
@@ -64,6 +75,8 @@ ActiveRecord::Schema.define(version: 2021_12_08_192119) do
 
   add_foreign_key "moto_route_favourites", "moto_routes"
   add_foreign_key "moto_route_favourites", "users"
+  add_foreign_key "moto_route_votes", "moto_routes"
+  add_foreign_key "moto_route_votes", "users"
   add_foreign_key "moto_routes", "users"
   add_foreign_key "point_of_interests", "moto_routes"
 end

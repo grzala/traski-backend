@@ -29,9 +29,6 @@ class MotoRoutesController < ApplicationController
       msgs << "You must be logged in to perform this action"
     end
 
-    puts "yooooo"
-    puts @moto_route
-    puts
     if !@moto_route
       err = true
       msgs << "Route of id: #{params[:id]} does not exist"
@@ -59,6 +56,30 @@ class MotoRoutesController < ApplicationController
     return render json: {
       messages: [msg],
       fav_status: fav_status
+    }
+
+  end
+
+  def vote
+    err = false
+    msgs = []
+
+    if !current_user
+      err = true
+      msgs << "You must be logged in to perform this action"
+    end
+
+    if !@moto_route
+      err = true
+      msgs << "Route of id: #{params[:id]} does not exist"
+    end
+
+    MotoRouteVote.upsert(user: current_user, moto_route: @moto_route, score: params[:score])
+
+    render json: {
+      messages: [""],
+      score_vote: params[:score],
+      current_score: @moto_route.score
     }
 
   end
