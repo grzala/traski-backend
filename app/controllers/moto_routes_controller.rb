@@ -1,5 +1,5 @@
 class MotoRoutesController < ApplicationController
-  before_action :set_moto_route, only: [:show, :switch_favourite]
+  before_action :set_moto_route, only: [:show, :switch_favourite, :vote]
 
   def index
     render json: {
@@ -74,10 +74,30 @@ class MotoRoutesController < ApplicationController
       msgs << "Route of id: #{params[:id]} does not exist"
     end
 
-    MotoRouteVote.upsert(user: current_user, moto_route: @moto_route, score: params[:score])
+    if !err
+      vote = MotoRouteVote.find_or_initialize_by(user: current_user, moto_route: @moto_route)
+      vote.score = params[:score]
+      
+      
+      if !vote.save
+        err = true
+        msgs.merge!(vote.errors.full_messages)
+      else 
+        @moto_route.reload # must call this as score was updated
+      end
+    end
+
+
+    if err
+      return render json: {
+        messages: msgs
+      }, :status => 401
+    end
+
+
 
     render json: {
-      messages: [""],
+      messages: ["Thank you for your vote. You voted: #{params[:score]}. Current score is #{@moto_route.score_rounded}/#{MotoRouteVote::MAX_VOTE_SCORE}."],
       score_vote: params[:score],
       current_score: @moto_route.score
     }

@@ -33,13 +33,25 @@ class MotoRoute < ApplicationRecord
         total_score += vote.score.to_f
       end
 
+      puts "VOTES COUNT"
+      puts votes.count
+
+      puts "TOTAL SCORE"
+      puts total_score
+
       average = total_score / max_score
 
-      self.score = average * MotoRouteVote::MAX_VOTE_SCORE
+      puts "average"
+      puts average
+
+      self.score = average * MotoRouteVote::MAX_VOTE_SCORE.to_f
       self.save
 
     end
 
+    def score_rounded
+      '%.2f' % self.score
+    end
 
   def serializable_hash(options={})
     to_return = super.merge ({
