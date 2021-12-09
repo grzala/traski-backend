@@ -61,8 +61,6 @@ class MotoRoute < ApplicationRecord
     end
 
   def serializable_hash(options={})
-    puts "IM IN MOTOROUTE"
-    puts options
     to_return = super.merge ({
         :coordinates => self.coordinates,
         :score => self.score

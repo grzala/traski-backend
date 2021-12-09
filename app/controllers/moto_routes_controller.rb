@@ -16,7 +16,7 @@ class MotoRoutesController < ApplicationController
 
     render json: {
       moto_route: @moto_route
-    }, :include => [:point_of_interests, :user],
+    }, :include => {:point_of_interests => {}, :user => {:include_virtual => [:total_routes_added]}},
        :with_user => current_user
   end
 

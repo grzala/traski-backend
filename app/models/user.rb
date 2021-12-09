@@ -34,6 +34,15 @@ class User < ApplicationRecord
         :full_name => self.full_name
     })
 
+    if options.key?(:include_virtual) && options[:include_virtual].include?(:total_routes_added)
+
+      to_return = to_return.merge ({
+        :total_routes_added => self.total_routes_added
+    })
+    end
+
+    return to_return
+
   end
   
   private
