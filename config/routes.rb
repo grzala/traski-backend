@@ -10,7 +10,12 @@ Rails.application.routes.draw do
   end
 
   resources :moto_routes
-  resources :moto_route_favourites, only: [:create, :destroy]
+  controller :moto_routes do
+    post '/moto_routes/switch_favourite', action: :switch_favourite, as: :switch_favourite
+  end
+
+
+
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
