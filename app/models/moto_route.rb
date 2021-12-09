@@ -3,6 +3,7 @@ class MotoRoute < ApplicationRecord
     has_many :point_of_interests, dependent: :destroy
     has_many :moto_route_favourites, dependent: :destroy
     has_many :moto_route_votes, dependent: :destroy
+    has_many :comments, -> {order "created_at DESC"} , dependent: :destroy
 
 
 

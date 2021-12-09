@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   controller :moto_routes do
     post '/moto_routes/switch_favourite', action: :switch_favourite, as: :switch_favourite
     post '/moto_routes/cast_rating_vote', action: :vote, as: :vote
+    get '/moto_routes/:id/comments', action: :get_comments, as: :get_comments
   end
 
 

@@ -1,5 +1,5 @@
 class MotoRoutesController < ApplicationController
-  before_action :set_moto_route, only: [:show, :switch_favourite, :vote]
+  before_action :set_moto_route, only: [:show, :switch_favourite, :vote, :get_comments]
 
   def index
     render json: {
@@ -16,7 +16,8 @@ class MotoRoutesController < ApplicationController
 
     render json: {
       moto_route: @moto_route
-    }, :include => {:point_of_interests => {}, :user => {:include_virtual => [:total_routes_added]}},
+    }, :include => {:point_of_interests => {}, 
+                    :user => {:include_virtual => [:total_routes_added]}},
        :with_user => current_user
   end
 
@@ -101,6 +102,18 @@ class MotoRoutesController < ApplicationController
       score_vote: params[:score],
       current_score: @moto_route.score
     }
+
+  end
+
+  def get_comments
+    
+    if !@moto_route
+      return render json: {
+        messages: ["Route of id: #{params[:id]} does not exist"]
+      }, :status => 404
+    end
+
+    render json: @moto_route.comments
 
   end
 

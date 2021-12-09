@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_09_125334) do
+ActiveRecord::Schema.define(version: 2021_12_09_150156) do
+
+  create_table "comments", force: :cascade do |t|
+    t.string "message"
+    t.integer "user_id"
+    t.integer "moto_route_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["moto_route_id"], name: "index_comments_on_moto_route_id"
+    t.index ["user_id"], name: "index_comments_on_user_id"
+  end
 
   create_table "moto_route_favourites", force: :cascade do |t|
     t.integer "user_id"
@@ -73,6 +83,8 @@ ActiveRecord::Schema.define(version: 2021_12_09_125334) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "comments", "moto_routes"
+  add_foreign_key "comments", "users"
   add_foreign_key "moto_route_favourites", "moto_routes"
   add_foreign_key "moto_route_favourites", "users"
   add_foreign_key "moto_route_votes", "moto_routes"
