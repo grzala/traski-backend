@@ -21,14 +21,20 @@ class User < ApplicationRecord
   end
 
 
-  def serializable_hash(options={})
-    super.merge ({
-      
-        :full_name => self.full_name
-      
-    })
+  def total_routes_added
+    MotoRoute.where(user: self).count
   end
 
+  def serializable_hash(options={})
+    puts "IM IN USER"
+    puts options
+
+
+    to_return = super.merge ({
+        :full_name => self.full_name
+    })
+
+  end
   
   private
 

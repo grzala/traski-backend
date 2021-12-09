@@ -51,4 +51,5 @@ class SessionsController < ApplicationController
             :messages => [msg]
         }
     end
+
 end
