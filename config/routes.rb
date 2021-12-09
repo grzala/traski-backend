@@ -18,6 +18,7 @@ Rails.application.routes.draw do
     post '/moto_routes/:id/comments', action: :create_comment, as: :create_comment
   end
 
+  resources :comments, only: [:destroy]
 
 
 
