@@ -1,5 +1,5 @@
 class MotoRoutesController < ApplicationController
-  before_action :set_moto_route, only: [:show, :switch_favourite, :vote, :get_comments]
+  before_action :set_moto_route, only: [:show, :switch_favourite, :vote, :get_comments, :create_comment]
 
   def index
     render json: {
@@ -116,6 +116,40 @@ class MotoRoutesController < ApplicationController
     render json: @moto_route.comments
 
   end
+
+  def create_comment
+      err = false
+      msgs = []
+
+      if !current_user
+        err = true
+        msgs << "You must be logged in to perform this action"
+      end
+
+      if !@moto_route
+        err = true
+        msgs << "Route with id: #{params[:id]} does not exist"
+      end
+
+      new_comment = nil
+      if !err
+        new_comment = Comment.new(user: current_user, moto_route: @moto_route, message: params[:message])
+        if !new_comment.save
+          err = true
+          msgs += new_comment.errors.full_messages
+        end
+      end
+
+      if err 
+          return render json: {
+              messages: msgs
+          }, :status => 401
+      end
+
+      render json: new_comment
+
+  end
+
 
   private 
   
