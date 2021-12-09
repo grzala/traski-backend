@@ -17,16 +17,22 @@ class MotoRoute < ApplicationRecord
     end
 
     def is_favourite?(user)
-      # ternary operator needs to be here, otherwise nil was returned
+      # ternary operator needs to be here, otherwise nil was returned instead of false
       return user && MotoRouteFavourite.find_by(user: user, moto_route: self) ? true : false
     end
 
 
   def serializable_hash(options={})
-    super.merge ({
-      
-        :coordinates => self.coordinates
-      
+    to_return = super.merge ({
+        :coordinates => self.coordinates,
     })
+    
+    if options[:with_user]
+      to_return.merge! ({
+          :is_favourite => self.is_favourite?(options[:with_user])
+      })
+    end
+
+    return to_return
   end
 end
