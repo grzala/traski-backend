@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   get 'moto_routes/show'
-  devise_for :users
+  #devise_for :users
+  devise_for :users, :controllers => { registrations: 'users/registrations' }
 
   resources :sessions, only: [:create] 
 
