@@ -14,11 +14,13 @@ Rails.application.routes.draw do
     post '/moto_routes/switch_favourite', action: :switch_favourite, as: :switch_favourite
     post '/moto_routes/cast_rating_vote', action: :vote, as: :vote
 
-    get '/moto_routes/:id/comments', action: :get_comments, as: :get_comments
-    post '/moto_routes/:id/comments', action: :create_comment, as: :create_comment
   end
 
   resources :comments, only: [:destroy]
+  controller :comments do
+    get '/moto_routes/:moto_rotue_id/comments', action: :get_for_route, as: :get_for_route
+    post '/moto_routes/:moto_rotue_id/comments', action: :create, as: :create
+  end
 
 
 
