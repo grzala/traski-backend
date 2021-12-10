@@ -41,16 +41,7 @@ class MotoRoute < ApplicationRecord
         total_score += vote.score.to_f
       end
 
-      puts "VOTES COUNT"
-      puts votes.count
-
-      puts "TOTAL SCORE"
-      puts total_score
-
       average = total_score / max_score
-
-      puts "average"
-      puts average
 
       self.score = average * MotoRouteVote::MAX_VOTE_SCORE.to_f
       self.save
@@ -68,12 +59,13 @@ class MotoRoute < ApplicationRecord
     })
     
     if options[:with_user]
-      users_vote = MotoRouteVote.find_by(user: options[:with_user], moto_route: self)
-      users_vote = users_vote.score if users_vote != nil
-      to_return.merge! ({
-          :is_favourite => self.is_favourite?(options[:with_user]),
-          :your_vote => users_vote
-      })
+      # This needs to be handled in a separate request
+      # users_vote = MotoRouteVote.find_by(user: options[:with_user], moto_route: self)
+      # users_vote = users_vote.score if users_vote != nil
+      # to_return.merge! ({
+      #     :is_favourite => self.is_favourite?(options[:with_user]),
+      #     :your_vote => users_vote
+      # })
     end
 
     return to_return

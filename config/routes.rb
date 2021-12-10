@@ -12,8 +12,10 @@ Rails.application.routes.draw do
 
   resources :moto_routes
   controller :moto_routes do
+    get '/moto_routes/:id/is_favourite', action: :is_favourite, as: :is_favourite
     post '/moto_routes/switch_favourite', action: :switch_favourite, as: :switch_favourite
     post '/moto_routes/cast_rating_vote', action: :vote, as: :vote
+    get '/moto_routes/:id/get_user_vote', action: :get_user_vote, as: :get_user_vote
 
   end
 
