@@ -24,6 +24,7 @@ class CommentsController < ApplicationController
             }, :status => 401
         end
 
+        @comment.destroy
         render json: {
             messages: ["Comment has been removed"],
             id: params[:id]
