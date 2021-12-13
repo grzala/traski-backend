@@ -16,7 +16,18 @@ Devise.setup do |config|
   # by default. You can change it below and use your own secret key.
 
   config.secret_key = ENV['JWT_SECRET'] ? ENV['JWT_SECRET'] : '860b1f7fd91b17dd726784c18c06b862fe0a844f3dca51b8990042388c9824a49682055b45c778279e64bb801e8da36b8aafa33626dc5b8e66193378cc51146b'
-  
+    
+  # This configuration is for Devise JWT.
+    config.jwt do |jwt|
+      # TODO: Assign this to environment variable before production deployment!
+      jwt.secret = ENV['JWT_SECRET'] ? ENV['JWT_SECRET'] : '860b1f7fd91b17dd726784c18c06b862fe0a844f3dca51b8990042388c9824a49682055b45c778279e64bb801e8da36b8aafa33626dc5b8e66193378cc51146b'
+      jwt.dispatch_requests = [
+          ['POST', %r{^/users/sign_in$}],
+          ['GET', %r{^/$}]
+      ]
+      jwt.request_formats = { user: [:json] }
+      jwt.expiration_time = 8.hours.to_i
+    end
 
   # ==> Controller configuration
   # Configure the parent class to the devise controllers.
