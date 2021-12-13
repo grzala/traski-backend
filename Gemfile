@@ -32,6 +32,7 @@ gem 'rack-cors'
 
 # Auth
 gem 'devise'
+gem 'devise-jwt'
 
 # Factories
 gem 'factory_bot_rails'
