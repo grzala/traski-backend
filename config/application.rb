@@ -35,6 +35,8 @@ module TraskiBackend
     # Don't generate system test files.
     config.generators.system_tests = nil
 
+    # Allow for classic session management
+    config.api_only = false
 
   end
 end
