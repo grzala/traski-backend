@@ -68,6 +68,23 @@ class MotoRoute < ApplicationRecord
       # })
     end
 
+
+    if options[:with_poi_count]
+      poi_count = {}
+      self.point_of_interests.each do |poi|
+        if !poi_count.has_key? poi.variant
+          poi_count[poi.variant] = 0
+        end
+
+        poi_count[poi.variant] += 1
+      end
+
+      to_return.merge!({
+        poi_count: poi_count
+      })
+    
+    end
+
     return to_return
   end
 end
