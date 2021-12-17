@@ -3,23 +3,27 @@ class SessionsController < ApplicationController
     def create
         error = false
         erorr_msg = ""
+        field_err_msg = {email: nil, password: nil}
 
         user = User.find_by_email(params[:user][:email])
         if (!user)
             error = true
             error_msg = "There is no user with email: " + params[:user][:email]
+            field_err_msg[:email] = "There is no user with email: " + params[:user][:email]
         end
         
         if (!error)
             if(!user.valid_password?(params[:user][:password]))
                 error = true
                 error_msg = "Email and password do not match"
+                field_err_msg[:password] = "Email and password do not match"
             end
         end
 
         if (error)
             return render :json => {
-                :messages => [error_msg]
+                :messages => [error_msg],
+                :field_err_msg => field_err_msg
             }, :status => 401
         end
 

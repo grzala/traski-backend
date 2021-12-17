@@ -9,11 +9,12 @@ class User < ApplicationRecord
   has_many :moto_route_votes, dependent: :destroy
   has_many :comments, dependent: :destroy
 
+  validates :password_confirmation, presence: true, on: :create
   validates_presence_of :first_name, :last_name
-  validates_length_of :first_name, minimum: 1, allow_blank: false, message: "First name cannot be empty"
-  validates_length_of :last_name, minimum: 1, allow_blank: false, message: "Last name cannot be empty"
   validates_length_of :first_name, maximum: 15, allow_blank: false, message: "First name cannot be longer than 15"
   validates_length_of :last_name, maximum: 15, allow_blank: false, message: "Last name cannot be longer than 15"
+  validates_length_of :first_name, minimum: 1, allow_blank: false, message: "First name cannot be empty"
+  validates_length_of :last_name, minimum: 1, allow_blank: false, message: "Last name cannot be empty"
 
 
   before_save :capitalize_name

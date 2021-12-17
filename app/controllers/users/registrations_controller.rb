@@ -6,10 +6,12 @@ class Users::RegistrationsController < Devise::RegistrationsController
     def create
         
         user = User.new(user_params)
+        field_err_msg = {email: nil, password: nil}
 
         if (!user.save)
             return render json: {
-                messages: user.errors.full_messages
+                messages: user.errors.full_messages,
+                field_err_msg: user.errors.to_hash
             }, :status => 401
         end
 
