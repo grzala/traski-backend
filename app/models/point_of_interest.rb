@@ -2,7 +2,10 @@ class PointOfInterest < ApplicationRecord
     belongs_to :moto_route
 
     validates_presence_of :name, :description, :latitude, :longitude, :variant, :moto_route
+    validates :latitude, numericality: { greater_than: -90, less_than: 90 }
+    validates :longitude, numericality: { greater_than: -180, less_than_or_equal_to: 180 }
 
+    MAX_VARIANT = 5
     enum variant: { 
         FOOD: 0, 
         VISTA: 1, 

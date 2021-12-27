@@ -30,7 +30,7 @@ last_names = [
 FactoryBot.define do
     
     factory :user do
-        sequence(:email) { |n| "user#{n}@mail.com" }
+        sequence(:email, User.next_id) { |n| "user#{n}@mail.com" }
         password { "password" }
         password_confirmation { "password" }
         first_name { first_names.sample }

@@ -23,6 +23,9 @@ class User < ApplicationRecord
     self.first_name + " " + self.last_name
   end
 
+  def self.next_id
+    self.last.nil? ? 1 : self.last.id + 1
+  end 
 
   def total_routes_added
     MotoRoute.where(user: self).count
