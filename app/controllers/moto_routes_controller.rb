@@ -25,7 +25,6 @@ class MotoRoutesController < ApplicationController
   end
 
   def switch_favourite
-
     is_logged_in?
     route_exists?
     
@@ -53,11 +52,25 @@ class MotoRoutesController < ApplicationController
       messages: [msg],
       fav_status: fav_status
     }
+  end
 
+  def is_favourite
+    is_logged_in?
+    route_exists?
+
+    if @err
+      return render json: {
+        messages: @msgs
+      }, :status => 401
+    end
+
+    render json: {
+      messages: ["Is Favourite query succesful"],
+      is_favourite: @moto_route.is_favourite?(current_user)
+    }
   end
 
   def vote
-
     is_logged_in?
     route_exists?
 
@@ -74,45 +87,20 @@ class MotoRoutesController < ApplicationController
       end
     end
 
-
     if @err
       return render json: {
         messages: @msgs
       }, :status => 401
     end
-
-
 
     render json: {
       messages: ["Thank you for your vote. You voted: #{params[:score]}. Current score is #{@moto_route.score_rounded}/#{MotoRouteVote::MAX_VOTE_SCORE}."],
       score_vote: params[:score],
       current_score: @moto_route.score
     }
-
-  end
-
-  def is_favourite
-
-    is_logged_in?
-    route_exists?
-
-    if @err
-      return render json: {
-        messages: @msgs
-      }, :status => 401
-    end
-
-
-
-    render json: {
-      messages: ["Is Favourite query succesful"],
-      is_favourite: @moto_route.is_favourite?(current_user)
-    }
-
   end
 
   def get_user_vote
-
     is_logged_in?
     route_exists?
 
@@ -132,7 +120,6 @@ class MotoRoutesController < ApplicationController
       messages: ["Score query successful"],
       user_score: score
     }
-
   end
 
   private 

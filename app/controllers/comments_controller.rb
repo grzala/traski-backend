@@ -78,9 +78,9 @@ class CommentsController < ApplicationController
 
   end
   
-    private 
+  private 
 
-    def set_moto_route
-        @moto_route = MotoRoute.find_by(id: params[:moto_route_id])
-    end
+  def set_moto_route
+      @moto_route = MotoRoute.find_by(id: params[:moto_route_id])
+  end
 end
