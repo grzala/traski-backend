@@ -38,6 +38,7 @@ class MotoRoutesController < ApplicationController
     fav = MotoRouteFavourite.find_by(user: current_user, moto_route: @moto_route)
     fav_status = false
 
+    # Switch favourites means favourite is created if not exists and removed if exists
     if fav
       fav.destroy
       fav_status = false

@@ -10,6 +10,8 @@ class MotoRoute < ApplicationRecord
     validates_presence_of :user, :name, :description, :coordinates_json_string,
                             :time_to_complete_h, :time_to_complete_m, :difficulty
 
+    validates :difficulty, numericality: { greater_than: 0, less_than_or_equal_to: 10 }
+
     accepts_nested_attributes_for :point_of_interests
 
     def coordinates
@@ -21,7 +23,7 @@ class MotoRoute < ApplicationRecord
     end
 
     def is_favourite?(user)
-      # ternary operator needs to be here, otherwise nil was returned instead of false
+      # Ternary operator needs to be here, otherwise nil was returned instead of false
       return user && MotoRouteFavourite.find_by(user: user, moto_route: self) ? true : false
     end
 
@@ -30,7 +32,7 @@ class MotoRoute < ApplicationRecord
 
       max_score = ((votes.count) * MotoRouteVote::MAX_VOTE_SCORE).to_f
 
-      if max_score <= 0.0 # prevent division by 0 in later parts of the code
+      if max_score <= 0.0 # Prevent division by 0 in later parts of the code
         self.score = 0.0
         self.save
         return
@@ -42,15 +44,29 @@ class MotoRoute < ApplicationRecord
       end
 
       average = total_score / max_score
+      
 
       self.score = average * MotoRouteVote::MAX_VOTE_SCORE.to_f
       self.save
-
     end
 
-    def score_rounded
-      '%.2f' % self.score
+  def score_rounded
+    '%.2f' % self.score
+  end
+
+  def get_poi_count
+    poi_count = {}
+    self.point_of_interests.each do |poi|
+      if !poi_count.has_key? poi.variant
+        poi_count[poi.variant] = 0
+      end
+
+      poi_count[poi.variant] += 1
     end
+
+    return poi_count
+  end
+
 
   def serializable_hash(options={})
     to_return = super.merge ({
@@ -70,21 +86,20 @@ class MotoRoute < ApplicationRecord
 
 
     if options[:with_poi_count]
-      poi_count = {}
-      self.point_of_interests.each do |poi|
-        if !poi_count.has_key? poi.variant
-          poi_count[poi.variant] = 0
-        end
-
-        poi_count[poi.variant] += 1
-      end
 
       to_return.merge!({
-        poi_count: poi_count
+        poi_count: self.get_poi_count
       })
     
     end
 
     return to_return
+  end
+
+
+  private
+  # Allow setting json coordinates only privately to control what string is being saved into this attribute
+  def coordinates_json_string=(new_coords)
+    write_attribute(:coordinates_json_string, new_coords)
   end
 end
