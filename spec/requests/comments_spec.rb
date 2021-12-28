@@ -74,7 +74,7 @@ RSpec.describe "Comments", type: :request do
     end
     
     it "Returns error if commenting on non-existant route" do
-      post create_comment_path(10000)
+      post create_comment_path(-1)
       expect(response).to have_http_status(401)
     end
   end

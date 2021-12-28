@@ -78,7 +78,6 @@ class MotoRoutesController < ApplicationController
       vote = MotoRouteVote.find_or_initialize_by(user: current_user, moto_route: @moto_route)
       vote.score = params[:score]
       
-      
       if !vote.save
         @err = true
         @msgs.merge!(vote.errors.full_messages)
@@ -125,7 +124,7 @@ class MotoRoutesController < ApplicationController
   private 
   
   def set_moto_route
-      @moto_route = MotoRoute.find(params[:id])
+      @moto_route = MotoRoute.find_by(id: params[:id])
   end
 
   def is_logged_in?
