@@ -1,50 +1,14 @@
 class CommentsController < ApplicationController
     before_action :set_moto_route, only: [:get_for_route, :create]
 
-
-    def destroy
-        err = false
-        msgs = []
-
-        if !current_user
-            err = true
-            msgs << "You have to be logged in to perform this action"
-        end
-
-        @comment = Comment.find(params[:id])
-
-        if !@comment
-            err = true
-            msgs << "Comment of id: #{params[:id]} does not exist"
-        elsif @comment.user.id != current_user.id
-            err = true
-            msgs << "You cannot delete someone else's comment"
-        end
-
-        if err
-            return render json: {
-                messages: msgs
-            }, :status => 401
-        end
-
-        @comment.destroy
-        render json: {
-            messages: ["Comment has been removed"],
-            id: params[:id]
-        }
-
-    end
-
     def get_for_route
-      
       if !@moto_route
         return render json: {
-          messages: ["Route of id: #{params[:moto_rotue_id]} does not exist"]
+          messages: ["Route of id: #{params[:moto_route_id]} does not exist"]
         }, :status => 404
       end
   
       render json: @moto_route.comments
-  
     end
   
     def create
@@ -58,7 +22,7 @@ class CommentsController < ApplicationController
   
         if !@moto_route
           err = true
-          msgs << "Route with id: #{params[:moto_rotue_id]} does not exist"
+          msgs << "Route with id: #{params[:moto_route_id]} does not exist"
         end
   
         new_comment = nil
@@ -81,9 +45,42 @@ class CommentsController < ApplicationController
     end
 
 
+    def destroy
+      err = false
+      msgs = []
+
+      if !current_user
+          err = true
+          msgs << "You have to be logged in to perform this action"
+      end
+
+      @comment = Comment.find(params[:id])
+
+      if !@comment
+          err = true
+          msgs << "Comment of id: #{params[:id]} does not exist"
+      elsif @comment.user.id != current_user.id
+          err = true
+          msgs << "You cannot delete someone else's comment"
+      end
+
+      if err
+          return render json: {
+              messages: msgs
+          }, :status => 401
+      end
+
+      @comment.destroy
+      render json: {
+          messages: ["Comment has been removed"],
+          id: params[:id]
+      }
+
+  end
+  
     private 
 
     def set_moto_route
-        @moto_route = MotoRoute.find(params[:moto_rotue_id])
+        @moto_route = MotoRoute.find_by(id: params[:moto_route_id])
     end
 end

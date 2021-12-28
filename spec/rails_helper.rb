@@ -61,4 +61,11 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+
+  # Use route names in tests
+  config.include Rails.application.routes.url_helpers
+
+  # This is needed to use devise sign_in method
+  config.infer_spec_type_from_file_location!
+  config.include Devise::Test::IntegrationHelpers, type: :request
 end
