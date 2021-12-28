@@ -60,14 +60,14 @@ RSpec.describe "MotoRoutes", type: :request do
 
 
   describe "Voting actions" do
-    before do
+
+    it "Allows users to vote and edit their vote" do
+
       @current_vote_attrs = {
         current_total: 0.0,
         vote_count: 0.0
       }
-    end
 
-    it "Allows users to vote and edit their vote" do
       post route_vote_path, params: {id: @moto_route1.id, score: 1}
       @moto_route1.reload
       @current_vote_attrs[:current_total] += 1.0
@@ -99,18 +99,40 @@ RSpec.describe "MotoRoutes", type: :request do
 
     end
 
-    # it "Doesn't allow users to vote invalid score numbers" do
+    it "Doesn't allow users to vote invalid score numbers" do
+      post route_vote_path, params: {id: @moto_route1.id, score: -1}
+      post route_vote_path, params: {id: @moto_route1.id, score: 6}
+      expect(response).not_to have_http_status(:success)
+    end
 
-    # end
+    it "Allows users to get their already voted score" do
+      get get_user_route_vote_path(@moto_route1.id)
+      expect(response).to have_http_status(:success)
+      expect(JSON.parse(response.body)["user_score"]).to be_nil
 
-    # it "Allows users to change vote" do
+      post route_vote_path, params: {id: @moto_route1.id, score: 2}
+
+      get get_user_route_vote_path(@moto_route1.id)
+      expect(response).to have_http_status(:success)
+      expect(JSON.parse(response.body)["user_score"]).to eq(2)
+    end
+
+    it "Does not allow not logged in users to perform any voting actions" do
+      logout(:user)
       
-    # end
+      get get_user_route_vote_path(@moto_route1.id)
+      expect(response).not_to have_http_status(:success)
 
-    # it "Allows users to get their already voted score" do
-    #   get_user_route_vote
-    # end
+      post route_vote_path, params: {id: @moto_route1.id, score: 2}
+      expect(response).not_to have_http_status(:success)
+    end
 
-    # it "Does not allow not logged in users to perform any voting actions"
+    it "Does not allow to vote or get vote on non existant routes" do
+      get get_user_route_vote_path(-1)
+      expect(response).not_to have_http_status(:success)
+
+      post route_vote_path, params: {id: -1, score: 2}
+      expect(response).not_to have_http_status(:success)
+    end
   end
 end

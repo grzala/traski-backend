@@ -80,7 +80,7 @@ class MotoRoutesController < ApplicationController
       
       if !vote.save
         @err = true
-        @msgs.merge!(vote.errors.full_messages)
+        @msgs += vote.errors.full_messages
       else 
         @moto_route.reload # must call this as score was updated
       end
