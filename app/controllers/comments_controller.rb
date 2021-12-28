@@ -59,7 +59,7 @@ class CommentsController < ApplicationController
       if !@comment
           err = true
           msgs << "Comment of id: #{params[:id]} does not exist"
-      elsif @comment.user.id != current_user.id
+      elsif !err && @comment.user.id != current_user.id
           err = true
           msgs << "You cannot delete someone else's comment"
       end

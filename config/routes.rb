@@ -22,7 +22,7 @@ Rails.application.routes.draw do
   resources :comments, only: [:destroy]
   controller :comments do
     get '/moto_routes/:moto_route_id/comments', action: :get_for_route, as: :get_comments_for_route
-    post '/moto_routes/:moto_route_id/comments', action: :create, as: :create
+    post '/moto_routes/:moto_route_id/comments', action: :create, as: :create_comment
   end
 
 
