@@ -24,7 +24,7 @@ class User < ApplicationRecord
   end
 
   def self.next_id
-    self.last.nil? ? 1 : self.last.id + 1
+    #self.last.nil? ? 1 : self.last.id + 1
   end 
 
   def total_routes_added

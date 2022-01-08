@@ -45,10 +45,11 @@ ActiveRecord::Schema.define(version: 2021_12_09_150156) do
     t.string "name"
     t.string "description"
     t.string "coordinates_json_string"
-    t.integer "date_open_day"
-    t.integer "date_open_month"
-    t.integer "date_closed_day"
-    t.integer "date_closed_month"
+    t.integer "date_open_day", default: 1
+    t.integer "date_open_month", default: 1
+    t.integer "date_closed_day", default: 1
+    t.integer "date_closed_month", default: 1
+    t.boolean "open_all_year", default: true
     t.integer "time_to_complete_h"
     t.integer "time_to_complete_m"
     t.integer "difficulty"

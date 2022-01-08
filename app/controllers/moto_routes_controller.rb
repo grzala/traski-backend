@@ -24,6 +24,44 @@ class MotoRoutesController < ApplicationController
        :with_user => current_user
   end
 
+  def create
+
+    is_logged_in?
+
+    # puts params[:data]
+    # puts params[:waypoints]
+    # puts params[:pois]
+
+    if !@err
+      data = params[:data]
+      @moto_route = MotoRoute.new(
+        user: current_user,
+        name: data['name'],
+        description: data['description'],
+      )
+      @moto_route.coordinates = params[:waypoints]
+
+      puts @moto_route
+      @moto_route.valid?
+      puts @moto_route.errors.full_messages
+
+    end
+
+
+    if @err
+      return render json: {
+        messages: @msgs
+      }, :status => 401
+    end
+
+
+    render json: {
+      yayo: "yayo"
+    }
+  end
+
+
+
   def switch_favourite
     is_logged_in?
     route_exists?
