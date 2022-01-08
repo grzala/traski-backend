@@ -28,6 +28,8 @@ class MotoRoute < ApplicationRecord
 
 
     validate :check_coordinate_duplicates
+    validate :check_at_least_two_coordinates
+    validate :lat_and_lng
 
 
 
@@ -126,7 +128,23 @@ class MotoRoute < ApplicationRecord
 
     (0...coordinates.length-1).each do |i|
       if coordinates[i] == coordinates[i+1]
-        errors.add(:coordinates, "Duplicate waypoints in route are not allowed")
+        self.errors.add(:coordinates, "Duplicate waypoints in route are not allowed")
+      end
+    end
+  end
+
+
+  def check_at_least_two_coordinates
+    if self.coordinates.length < 2
+      errors.add(:coordinates, "At least two waypoints required to make a route")
+    end
+  end
+
+  def lat_and_lng
+    self.coordinates.each do |coord|
+      if (coord['lat'] >= 90 || coord['lat'] <= -90) || ((coord['lng'] > 180 || coord['lng'] <= -180))
+        self.errors.add(:coordinates, "All waypoints must have valid coordinates")
+        return
       end
     end
   end

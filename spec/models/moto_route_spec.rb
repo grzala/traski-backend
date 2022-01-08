@@ -101,7 +101,7 @@ RSpec.describe MotoRoute, type: :model do
 
 
         it "Expects json coordinates to have valid latitude and longitude" do
-            coords = [{lat: 0, lng: 0}, {lat: 0, lng: 0}]
+            coords = [{lat: 0, lng: 0}, {lat: 1, lng: 1}]
             @moto_route.coordinates = coords
             expect(@moto_route).to be_valid
 
