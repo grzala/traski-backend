@@ -13,6 +13,11 @@ class MotoRoute < ApplicationRecord
     validates :time_to_complete_h, numericality: { greater_than_or_equal_to: 0, less_than: 24 }
     validates :time_to_complete_m, numericality: { greater_than_or_equal_to: 0, less_than: 60 }
 
+    validates :date_open_day, numericality: { greater_than: 0, less_than: 32 }
+    validates :date_open_month, numericality: { greater_than: 0, less_than: 13 }
+    validates :date_closed_day, numericality: { greater_than: 0, less_than: 32 }
+    validates :date_closed_month, numericality: { greater_than: 0, less_than: 13 }
+
     accepts_nested_attributes_for :point_of_interests
 
 

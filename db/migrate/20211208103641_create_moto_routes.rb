@@ -4,8 +4,12 @@ class CreateMotoRoutes < ActiveRecord::Migration[6.1]
       t.string :name
       t.string :description
       t.string :coordinates_json_string
-      t.date :open_start
-      t.date :open_end
+
+      t.integer :date_open_day
+      t.integer :date_open_month
+      t.integer :date_closed_day
+      t.integer :date_closed_month
+
       t.integer :time_to_complete_h
       t.integer :time_to_complete_m
       t.integer :difficulty

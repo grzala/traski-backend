@@ -149,6 +149,35 @@ RSpec.describe MotoRoute, type: :model do
             expect(@moto_route).not_to be_valid
         end
 
+        it "Expects valid open and close dates" do
+            @moto_route.date_open_day = 0
+            expect(@moto_route).not_to be_valid
+            @moto_route.date_open_day = 32
+            expect(@moto_route).not_to be_valid
+            @moto_route.date_open_day = 15
+            expect(@moto_route).to be_valid
+
+            @moto_route.date_open_month = 0
+            expect(@moto_route).not_to be_valid
+            @moto_route.date_open_month = 13
+            expect(@moto_route).not_to be_valid
+            @moto_route.date_open_month = 12
+            expect(@moto_route).to be_valid
+
+            @moto_route.date_closed_day = 0
+            expect(@moto_route).not_to be_valid
+            @moto_route.date_closed_day = 32
+            expect(@moto_route).not_to be_valid
+            @moto_route.date_closed_day = 15
+            expect(@moto_route).to be_valid
+
+            @moto_route.date_closed_month = 0
+            expect(@moto_route).not_to be_valid
+            @moto_route.date_closed_month = 13
+            expect(@moto_route).not_to be_valid
+            @moto_route.date_closed_month = 12
+            expect(@moto_route).to be_valid
+        end
     end
 
     describe "Deletion" do 

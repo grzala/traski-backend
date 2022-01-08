@@ -23,8 +23,10 @@ FactoryBot.define do
         sequence(:name) { |n| "Route lorem ipsum #{n}" }
         sequence(:description) { |n| "Route description lorem ipsum lorem ipsum lorem ipsum #{n} " }
         coordinates { create_random_coords }
-        open_start { Time.at(rand * Time.now.to_i) }
-        open_end { Time.at(rand * Time.now.to_i) }
+        date_open_day { rand(1..25) }
+        date_open_month { rand(1..12) }
+        date_closed_day { rand(1..25) }
+        date_closed_month { rand(1..12) }
         time_to_complete_h { rand(0...23) }
         time_to_complete_m { rand(0...60) }
         difficulty { rand(1..10) }

@@ -16,37 +16,37 @@ module MotoRoutesSeed
             point_of_interests_attributes: [
                 { 
                     name: "some FOOD",
-                    description: Cryptozoologist.lorem(12),
+                    description: Cryptozoologist.lorem(1),
                     coordinates: {lat: 49.394489, lng: 22.402796},
                     variant: :FOOD
                 },
                 { 
                     name: "some VISTA",
-                    description: Cryptozoologist.lorem(12),
+                    description: Cryptozoologist.lorem(1),
                     coordinates: {lat: 49.394489, lng: 22.422796},
                     variant: :VISTA
                 },
                 { 
                     name: "some URBEX",
-                    description: Cryptozoologist.lorem(12),
+                    description: Cryptozoologist.lorem(1),
                     coordinates: {lat: 49.394489, lng: 22.442796},
                     variant: :URBEX
                 },
                 { 
                     name: "some DANGER",
-                    description: Cryptozoologist.lorem(12),
+                    description: Cryptozoologist.lorem(1),
                     coordinates: {lat: 49.394489, lng: 22.462796},
                     variant: :DANGER
                 },
                 { 
                     name: "some FUEL",
-                    description: Cryptozoologist.lorem(12),
+                    description: Cryptozoologist.lorem(1),
                     coordinates: {lat: 49.394489, lng: 22.482796},
                     variant: :FUEL
                 },
                 { 
                     name: "some point",
-                    description: Cryptozoologist.lorem(12),
+                    description: Cryptozoologist.lorem(1),
                     coordinates: {lat: 49.394489, lng: 22.502796},
                     variant: :OTHER
                 },
