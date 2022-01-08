@@ -6,13 +6,27 @@ class MotoRoute < ApplicationRecord
     has_many :comments, -> {order "created_at DESC"} , dependent: :destroy
 
 
-
     validates_presence_of :user, :name, :description, :coordinates_json_string,
                             :time_to_complete_h, :time_to_complete_m, :difficulty
 
     validates :difficulty, numericality: { greater_than: 0, less_than_or_equal_to: 10 }
+    validates :time_to_complete_h, numericality: { greater_than_or_equal_to: 0, less_than: 24 }
+    validates :time_to_complete_m, numericality: { greater_than_or_equal_to: 0, less_than: 60 }
 
     accepts_nested_attributes_for :point_of_interests
+
+
+    MIN_NAME_LENGTH = 5
+    MAX_NAME_LENGTH = 50
+    MIN_DESCRIPTION_LENGTH = 20
+    MAX_DESCRIPTION_LEGTH = 400
+
+    validates_length_of :name, minimum: MIN_NAME_LENGTH, allow_blank: false, message: "Name must be minumum #{MIN_NAME_LENGTH} characters long"
+    validates_length_of :name, maximum: MAX_NAME_LENGTH, message: "Name cannot exceed #{MAX_NAME_LENGTH} characters"
+    validates_length_of :description, minimum: MIN_DESCRIPTION_LENGTH, allow_blank: false, message: "Description must be minumum #{MIN_DESCRIPTION_LENGTH} characters long"
+    validates_length_of :description, maximum: MAX_DESCRIPTION_LEGTH, message: "Description cannot exceed #{MAX_DESCRIPTION_LEGTH} characters"
+
+
 
     def coordinates
         return JSON.parse self.coordinates_json_string

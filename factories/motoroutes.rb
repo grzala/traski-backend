@@ -20,12 +20,12 @@ end
 FactoryBot.define do
     
     factory :useless_moto_route, class: 'MotoRoute' do
-        sequence(:name) { |n| "Route #{n}" }
-        sequence(:description) { |n| "Route desc #{n} " }
+        sequence(:name) { |n| "Route lorem ipsum #{n}" }
+        sequence(:description) { |n| "Route description lorem ipsum lorem ipsum lorem ipsum #{n} " }
         coordinates { create_random_coords }
         open_start { Time.at(rand * Time.now.to_i) }
         open_end { Time.at(rand * Time.now.to_i) }
-        time_to_complete_h { rand(0...100) }
+        time_to_complete_h { rand(0...23) }
         time_to_complete_m { rand(0...60) }
         difficulty { rand(1..10) }
         score { 0 }

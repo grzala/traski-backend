@@ -100,28 +100,28 @@ RSpec.describe MotoRoute, type: :model do
 
         it "Expects json coordinates to have valid latitude and longitude" do
             coords = [{lat: 0, lng: 0}, {lat: 0, lng: 0}]
-            @moto_route.coords = coords
+            @moto_route.coordinates = coords
             expect(@moto_route).to be_valid
 
 
             coords = [{lat: -89.9, lng: -179.9}, {lat: 89.9, lng: 180.0}]
-            @moto_route.coords = coords
+            @moto_route.coordinates = coords
             expect(@moto_route).to be_valid
     
             coords = [{lat: -90, lng: 0}, {lat: 0, lng: 0}]
-            @moto_route.coords = coords
+            @moto_route.coordinates = coords
             expect(@moto_route).not_to be_valid
 
             coords = [{lat: 90, lng: 0}, {lat: 0, lng: 0}]
-            @moto_route.coords = coords
+            @moto_route.coordinates = coords
             expect(@moto_route).not_to be_valid
 
             coords = [{lat: 0, lng: -180}, {lat: 0, lng: 0}]
-            @moto_route.coords = coords
+            @moto_route.coordinates = coords
             expect(@moto_route).not_to be_valid
 
             coords = [{lat: 0, lng: 180.1}, {lat: 0, lng: 0}]
-            @moto_route.coords = coords
+            @moto_route.coordinates = coords
             expect(@moto_route).not_to be_valid
         end
 
@@ -137,13 +137,13 @@ RSpec.describe MotoRoute, type: :model do
         end
 
         it "Expects minutes to complete to be between 0 and 60" do
-            @moto_route.time_to_complete_h = -1
+            @moto_route.time_to_complete_m = -1
             expect(@moto_route).not_to be_valid
-            @moto_route.time_to_complete_h = 0
+            @moto_route.time_to_complete_m = 0
             expect(@moto_route).to be_valid
-            @moto_route.time_to_complete_h = 59
+            @moto_route.time_to_complete_m = 59
             expect(@moto_route).to be_valid
-            @moto_route.time_to_complete_h = 60
+            @moto_route.time_to_complete_m = 60
             expect(@moto_route).not_to be_valid
         end
 
