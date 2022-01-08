@@ -86,6 +86,8 @@ RSpec.describe MotoRoute, type: :model do
         it "Expects json coordinates not to have duplicate waypoints" do
             @moto_route.coordinates = [{lat: 20, lng: 20}, {lat: 20, lng: 20}]
             expect(@moto_route).not_to be_valid
+            @moto_route.coordinates = [{lat: 20, lng: 31}, {lat: 10, lng: 12}, {lat: 20, lng: 25}, {lat: 20, lng: 31}, {lat: 21, lng: 22}]
+            expect(@moto_route).not_to be_valid
         end
 
         it "Expects json coordinates array to have at least two waypoints" do

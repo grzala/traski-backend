@@ -27,6 +27,9 @@ class MotoRoute < ApplicationRecord
     validates_length_of :description, maximum: MAX_DESCRIPTION_LEGTH, message: "Description cannot exceed #{MAX_DESCRIPTION_LEGTH} characters"
 
 
+    validate :check_coordinate_duplicates
+
+
 
     def coordinates
         return JSON.parse self.coordinates_json_string
@@ -115,5 +118,16 @@ class MotoRoute < ApplicationRecord
   # Allow setting json coordinates only privately to control what string is being saved into this attribute
   def coordinates_json_string=(new_coords)
     write_attribute(:coordinates_json_string, new_coords)
+  end
+
+  def check_coordinate_duplicates
+    coordinates = self.coordinates
+    coordinates.sort_by!{ |c| [c['lat'], c['lng']] }
+
+    (0...coordinates.length-1).each do |i|
+      if coordinates[i] == coordinates[i+1]
+        errors.add(:coordinates, "Duplicate waypoints in route are not allowed")
+      end
+    end
   end
 end

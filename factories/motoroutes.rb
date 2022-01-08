@@ -3,8 +3,8 @@
 def create_random_coords
     result = []
     
-    (0..rand(2..15)).each do
-        result << {lat: rand(20.0..50.0), lng: rand(20.0..50.0)}
+    (0..rand(2..15)).each do |i|
+        result << {lat: 20.0 + i, lng: 20.0 + i}
     end
 
     return result
