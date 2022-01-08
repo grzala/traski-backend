@@ -10,10 +10,10 @@ class PointOfInterest < ApplicationRecord
     MIN_DESCRIPTION_LENGTH = 20
     MAX_DESCRIPTION_LEGTH = 250
 
-    validates_length_of :name, minimum: MIN_NAME_LENGTH, allow_blank: false, message: "Name must be minumum #{MIN_NAME_LENGTH} characters long"
-    validates_length_of :name, maximum: MAX_NAME_LENGTH, message: "Name cannot exceed #{MAX_NAME_LENGTH} characters"
-    validates_length_of :description, minimum: MIN_DESCRIPTION_LENGTH, allow_blank: false, message: "Description must be minumum #{MIN_DESCRIPTION_LENGTH} characters long"
-    validates_length_of :description, maximum: MAX_DESCRIPTION_LEGTH, message: "Description cannot exceed #{MAX_DESCRIPTION_LEGTH} characters"
+    validates_length_of :name, minimum: MIN_NAME_LENGTH, allow_blank: false, message: "must be minumum #{MIN_NAME_LENGTH} characters long"
+    validates_length_of :name, maximum: MAX_NAME_LENGTH, message: "cannot exceed #{MAX_NAME_LENGTH} characters"
+    validates_length_of :description, minimum: MIN_DESCRIPTION_LENGTH, allow_blank: false, message: "must be minumum #{MIN_DESCRIPTION_LENGTH} characters long"
+    validates_length_of :description, maximum: MAX_DESCRIPTION_LEGTH, message: "cannot exceed #{MAX_DESCRIPTION_LEGTH} characters"
 
     MAX_VARIANT = 5
     enum variant: { 

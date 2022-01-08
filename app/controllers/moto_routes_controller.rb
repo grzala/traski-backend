@@ -32,31 +32,65 @@ class MotoRoutesController < ApplicationController
     # puts params[:waypoints]
     # puts params[:pois]
 
+    field_err_msgs = {}
+    field_err_msgs[:pois] = {}
     if !@err
-      data = params[:data]
-      @moto_route = MotoRoute.new(
-        user: current_user,
-        name: data['name'],
-        description: data['description'],
-      )
-      @moto_route.coordinates = params[:waypoints]
+      MotoRoute.transaction do
+        data = params[:data]
+        @moto_route = MotoRoute.new(
+          user: current_user,
+          name: data[:name],
+          description: data[:description],
+          difficulty: data[:difficulty],
+          time_to_complete_h: data[:time_to_complete_h],
+          time_to_complete_m: data[:time_to_complete_m],
+          date_open_day: data[:date_open][:day],
+          date_open_month: data[:date_open][:month],
+          date_closed_day: data[:date_closed][:day],
+          date_closed_month: data[:date_closed][:month],
+          open_all_year: data[:open_all_year],
+        )
+        @moto_route.coordinates = params[:waypoints]
 
-      puts @moto_route
-      @moto_route.valid?
-      puts @moto_route.errors.full_messages
+        if !@moto_route.save
+          @err = true
 
+          field_err_msgs[:moto_route] = @moto_route.errors.to_hash
+          raise ActiveRecord::Rollback
+        end
+
+        pois = params[:pois]
+        pois.each do |poi|
+          new_poi = PointOfInterest.new(
+            moto_route: @moto_route,
+            name: poi[:name],
+            description: poi[:description],
+            coordinates: poi[:coordinates],
+            variant: poi[:variant],
+          )
+
+          if !new_poi.save
+            @err = true
+
+            field_err_msgs[:pois][poi[:id]] = new_poi.errors.to_hash
+          end
+        end
+
+        if @err then raise ActiveRecord::Rollback end
+      end
     end
-
 
     if @err
       return render json: {
-        messages: @msgs
+        messages: @msgs,
+        field_err_msgs: field_err_msgs,
       }, :status => 401
     end
 
 
     render json: {
-      yayo: "yayo"
+      messages: ["Route created successfully"],
+      new_id: @moto_route.id
     }
   end
 
