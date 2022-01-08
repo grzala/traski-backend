@@ -53,7 +53,7 @@ RSpec.describe PointOfInterest, type: :model do
       expect(@poi).not_to be_valid
     end
 
-    it "Validates name length to be between 5 and 20 characters" do
+    it "Validates name length to be between 5 and 35 characters" do
       @poi.name = ""
       expect(@poi).not_to be_valid
       @poi.name = "yyyy"
@@ -62,9 +62,9 @@ RSpec.describe PointOfInterest, type: :model do
       expect(@poi).to be_valid
 
 
-      @poi.name = "y" * 21
+      @poi.name = "y" * 36
       expect(@poi).not_to be_valid
-      @poi.name = "y" * 20
+      @poi.name = "y" * 35
       expect(@poi).to be_valid
     end
 

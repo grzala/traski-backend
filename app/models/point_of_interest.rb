@@ -6,7 +6,7 @@ class PointOfInterest < ApplicationRecord
     validates :longitude, numericality: { greater_than: -180, less_than_or_equal_to: 180 }
 
     MIN_NAME_LENGTH = 5
-    MAX_NAME_LENGTH = 20
+    MAX_NAME_LENGTH = 35
     MIN_DESCRIPTION_LENGTH = 20
     MAX_DESCRIPTION_LEGTH = 250
 
