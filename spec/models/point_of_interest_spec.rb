@@ -53,6 +53,36 @@ RSpec.describe PointOfInterest, type: :model do
       expect(@poi).not_to be_valid
     end
 
+    it "Validates name length to be between 5 and 20 characters" do
+      @poi.name = ""
+      expect(@poi).not_to be_valid
+      @poi.name = "yyyy"
+      expect(@poi).not_to be_valid
+      @poi.name = "yyyyy"
+      expect(@poi).to be_valid
+
+
+      @poi.name = "y" * 21
+      expect(@poi).not_to be_valid
+      @poi.name = "y" * 20
+      expect(@poi).to be_valid
+    end
+
+    it "Validates description length to be between 20 and 250 characters" do
+      @poi.description = ""
+      expect(@poi).not_to be_valid
+      @poi.description = "yyyy"
+      expect(@poi).not_to be_valid
+      @poi.description = "y" * 20
+      expect(@poi).to be_valid
+
+
+      @poi.description = "y" * 251
+      expect(@poi).not_to be_valid
+      @poi.description = "y" * 250
+      expect(@poi).to be_valid
+    end
+
   end
 
   describe "Deletion" do

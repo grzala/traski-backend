@@ -27,7 +27,7 @@ def mimic_poi_count(poi_count, poi)
     return poi_count
 end
 
-RSpec.describe User, type: :model do
+RSpec.describe MotoRoute, type: :model do
     before do
         @user = FactoryBot.create(:user)
         @moto_route = FactoryBot.create(:useless_moto_route, user: @user)
@@ -51,6 +51,100 @@ RSpec.describe User, type: :model do
 
         it "Disallows direct assignment of json coordinates" do
             expect { @moto_route.coordinates_json_string = "test" }.to raise_error(NoMethodError)
+        end
+
+        it "Validates name length to be between 5 and 50 characters" do
+            @moto_route.name = ""
+            expect(@moto_route).not_to be_valid
+            @moto_route.name = "yyyy"
+            expect(@moto_route).not_to be_valid
+            @moto_route.name = "yyyyy"
+            expect(@moto_route).to be_valid
+
+
+            @moto_route.name = "y" * 51
+            expect(@moto_route).not_to be_valid
+            @moto_route.name = "y" * 50
+            expect(@moto_route).to be_valid
+        end
+
+        it "Validates description length to be between 20 and 400 characters" do
+            @moto_route.description = ""
+            expect(@moto_route).not_to be_valid
+            @moto_route.description = "yyyy"
+            expect(@moto_route).not_to be_valid
+            @moto_route.description = "y" * 20
+            expect(@moto_route).to be_valid
+
+
+            @moto_route.description = "y" * 401
+            expect(@moto_route).not_to be_valid
+            @moto_route.description = "y" * 400
+            expect(@moto_route).to be_valid
+        end
+
+        it "Expects json coordinates not to have duplicate waypoints" do
+            @moto_route.coordinates = [{lat: 20, lng: 20}, {lat: 20, lng: 20}]
+            expect(@moto_route).not_to be_valid
+        end
+
+        it "Expects json coordinates array to have at least two waypoints" do
+            @moto_route.coordinates = []
+            expect(@moto_route).not_to be_valid
+            @moto_route.coordinates = [{lat: 20, lng: 20}]
+            expect(@moto_route).not_to be_valid
+            @moto_route.coordinates = [{lat: 20, lng: 20}, {lat: 30, lng: 30}]
+            expect(@moto_route).to be_valid
+        end
+
+
+        it "Expects json coordinates to have valid latitude and longitude" do
+            coords = [{lat: 0, lng: 0}, {lat: 0, lng: 0}]
+            @moto_route.coords = coords
+            expect(@moto_route).to be_valid
+
+
+            coords = [{lat: -89.9, lng: -179.9}, {lat: 89.9, lng: 180.0}]
+            @moto_route.coords = coords
+            expect(@moto_route).to be_valid
+    
+            coords = [{lat: -90, lng: 0}, {lat: 0, lng: 0}]
+            @moto_route.coords = coords
+            expect(@moto_route).not_to be_valid
+
+            coords = [{lat: 90, lng: 0}, {lat: 0, lng: 0}]
+            @moto_route.coords = coords
+            expect(@moto_route).not_to be_valid
+
+            coords = [{lat: 0, lng: -180}, {lat: 0, lng: 0}]
+            @moto_route.coords = coords
+            expect(@moto_route).not_to be_valid
+
+            coords = [{lat: 0, lng: 180.1}, {lat: 0, lng: 0}]
+            @moto_route.coords = coords
+            expect(@moto_route).not_to be_valid
+        end
+
+        it "Expects hours to complete to be between 0 and 23" do
+            @moto_route.time_to_complete_h = -1
+            expect(@moto_route).not_to be_valid
+            @moto_route.time_to_complete_h = 0
+            expect(@moto_route).to be_valid
+            @moto_route.time_to_complete_h = 23
+            expect(@moto_route).to be_valid
+            @moto_route.time_to_complete_h = 24
+            expect(@moto_route).not_to be_valid
+        end
+
+        it "Expects minutes to complete to be between 0 and 60" do
+            @moto_route.time_to_complete_h = -1
+            expect(@moto_route).not_to be_valid
+            @moto_route.time_to_complete_h = 0
+            expect(@moto_route).to be_valid
+            @moto_route.time_to_complete_h = 59
+            expect(@moto_route).to be_valid
+            @moto_route.time_to_complete_h = 60
+            expect(@moto_route).not_to be_valid
         end
 
     end
