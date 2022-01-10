@@ -1,5 +1,5 @@
 class MotoRoutesController < ApplicationController
-  before_action :set_moto_route, only: [:show, :switch_favourite, :vote, :get_user_vote, :is_favourite]
+  before_action :set_moto_route, only: [:show, :switch_favourite, :vote, :get_user_vote, :is_favourite, :update]
 
   def index
     render json: {
@@ -56,6 +56,7 @@ class MotoRoutesController < ApplicationController
           @err = true
 
           field_err_msgs[:moto_route] = @moto_route.errors.to_hash
+          @msgs << "Adding route not successful. Please check your inputs and try again later."
           raise ActiveRecord::Rollback
         end
 
@@ -73,6 +74,7 @@ class MotoRoutesController < ApplicationController
             @err = true
 
             field_err_msgs[:pois][poi[:id]] = new_poi.errors.to_hash
+            @msgs << "Adding route not successful. Please check your inputs and try again later."
           end
         end
 
@@ -90,15 +92,93 @@ class MotoRoutesController < ApplicationController
 
     render json: {
       messages: ["Route created successfully"],
-      new_id: @moto_route.id
+      id: @moto_route.id
     }
   end
 
   
   def update
 
+    is_logged_in?
+    route_exists?
+
+    field_err_msgs = []
+
+    if !@err && @moto_route.user != current_user
+      @err = true
+      @msgs << "You cannot edit this route"
+    end
+
+
+    field_err_msgs = {}
+    field_err_msgs[:pois] = {}
+    if !@err
+      MotoRoute.transaction do
+        data = params[:data]
+
+        # keep the pois to delete them later
+        @existing_pois = @moto_route.point_of_interests.map { |poi| poi }
+
+        @moto_route.user = current_user
+        @moto_route.name = data[:name]
+        @moto_route.description = data[:description]
+        @moto_route.difficulty = data[:difficulty]
+        @moto_route.time_to_complete_h = data[:time_to_complete_h]
+        @moto_route.time_to_complete_m = data[:time_to_complete_m]
+        @moto_route.date_open_day = data[:date_open][:day]
+        @moto_route.date_open_month = data[:date_open][:month]
+        @moto_route.date_closed_day = data[:date_closed][:day]
+        @moto_route.date_closed_month = data[:date_closed][:month]
+        @moto_route.open_all_year = data[:open_all_year]
+        @moto_route.coordinates = params[:waypoints]
+
+        if !@moto_route.save
+          @err = true
+
+          field_err_msgs[:moto_route] = @moto_route.errors.to_hash
+          @msgs << "Adding route not successful. Please check your inputs and try again later."
+          raise ActiveRecord::Rollback
+        end
+
+        pois = params[:pois]
+        pois.each do |poi|
+          new_poi = PointOfInterest.new(
+            moto_route: @moto_route,
+            name: poi[:name],
+            description: poi[:description],
+            coordinates: poi[:coordinates],
+            variant: poi[:variant],
+          )
+
+          if !new_poi.save
+            @err = true
+
+            field_err_msgs[:pois][poi[:id]] = new_poi.errors.to_hash
+            @msgs << "Adding route not successful. Please check your inputs and try again later."
+          end
+        end
+
+        if @err then raise ActiveRecord::Rollback end
+        
+          # new pois were added, remove previously existing pois
+          @existing_pois.each do |poi_to_delete|
+            poi_to_delete.delete
+          end
+      end
+    end
+
+
+
+    if @err
+      return render json: {
+        messages: @msgs,
+        field_err_msgs: field_err_msgs,
+      }, :status => 401
+    end
+
     render json: {
-      messages: ["YAYO"]
+      id: @moto_route.id,
+      messages: ["Route edited"]
     }
   end
 
