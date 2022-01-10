@@ -52,10 +52,6 @@ RSpec.describe User, type: :model do
       it "Can return full name" do
           expect(@user.full_name).to eq(@user.first_name + " " + @user.last_name)
       end
-      
-      it "Can get next id" do
-          expect(User.last.id + 1).to eq(User.last.nil? ? 1 : User.last.id + 1)
-      end
 
       it "Can return total routes added" do
         expect(@user.total_routes_added).to eq(0)
