@@ -54,7 +54,7 @@ RSpec.describe User, type: :model do
       end
       
       it "Can get next id" do
-          expect(User.next_id).to eq(User.last.nil? ? 1 : User.last.id + 1)
+          expect(User.last.id + 1).to eq(User.last.nil? ? 1 : User.last.id + 1)
       end
 
       it "Can return total routes added" do

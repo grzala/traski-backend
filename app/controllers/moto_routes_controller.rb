@@ -94,6 +94,14 @@ class MotoRoutesController < ApplicationController
     }
   end
 
+  
+  def update
+
+    render json: {
+      messages: ["YAYO"]
+    }
+  end
+
 
 
   def switch_favourite
