@@ -20,7 +20,5 @@ UserSeed::USERS.each do |user|
 end
 
 MotoRoutesSeed::MOTO_ROUTES.each_with_index do |moto_route, i|
-    puts i
-    puts i % added_users.length
     MotoRoute.create!(moto_route.merge({user: added_users[i % added_users.length]}))
 end
