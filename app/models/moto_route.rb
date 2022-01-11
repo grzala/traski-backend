@@ -7,7 +7,7 @@ class MotoRoute < ApplicationRecord
 
 
     validates_presence_of :user, :name, :description, :coordinates_json_string,
-                            :time_to_complete_h, :time_to_complete_m, :difficulty
+                            :time_to_complete_h, :time_to_complete_m, :difficulty, :distance
 
     validates :difficulty, numericality: { greater_than: 0, less_than_or_equal_to: 10 }
     validates :time_to_complete_h, numericality: { greater_than_or_equal_to: 0, less_than: 24 }

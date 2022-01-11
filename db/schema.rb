@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_09_150156) do
+ActiveRecord::Schema.define(version: 2022_01_11_164718) do
 
   create_table "comments", force: :cascade do |t|
     t.string "message"
@@ -57,6 +57,7 @@ ActiveRecord::Schema.define(version: 2021_12_09_150156) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.float "score", default: 0.0
+    t.float "distance", default: 0.0
     t.index ["user_id"], name: "index_moto_routes_on_user_id"
   end
 

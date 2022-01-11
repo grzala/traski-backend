@@ -45,6 +45,7 @@ class MotoRoutesController < ApplicationController
           date_closed_day: data[:date_closed][:day],
           date_closed_month: data[:date_closed][:month],
           open_all_year: data[:open_all_year],
+          distance: data[:distance],
         )
         @moto_route.coordinates = params[:waypoints]
 
@@ -126,6 +127,7 @@ class MotoRoutesController < ApplicationController
         @moto_route.date_closed_day = data[:date_closed][:day]
         @moto_route.date_closed_month = data[:date_closed][:month]
         @moto_route.open_all_year = data[:open_all_year]
+        @moto_route.distance = params[:distance]
         @moto_route.coordinates = params[:waypoints]
 
         if !@moto_route.save
