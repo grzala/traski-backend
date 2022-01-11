@@ -1,5 +1,5 @@
 class MotoRoutesController < ApplicationController
-  before_action :set_moto_route, only: [:show, :switch_favourite, :vote, :get_user_vote, :is_favourite, :update, :destroy]
+  before_action :set_moto_route, only: [:show, :switch_favourite, :vote, :get_user_vote, :is_favourite, :update, :destroy, :can_edit]
 
   def index
     render json: {
@@ -231,6 +231,14 @@ class MotoRoutesController < ApplicationController
     return render json: {
       messages: [msg],
       fav_status: fav_status
+    }
+  end
+
+  def can_edit
+    can_edit = current_user != nil && @moto_route != nil && current_user == @moto_route.user
+
+    return render json: {
+      can_edit: can_edit
     }
   end
 
