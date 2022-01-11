@@ -78,6 +78,21 @@ class MotoRoutesController < ApplicationController
         end
 
         if @err then raise ActiveRecord::Rollback end
+
+
+        # get thumbnail from google maps api
+        begin
+          thumbnail_path = Rails.root.join('public', 'route_thumbnails', @moto_route.id.to_s + '.png')
+          open(thumbnail_path, 'wb') do |file|
+            file << open(params[:google_maps_static_api_url]).read
+          end
+        rescue => error
+          puts error
+          @err = true
+          @msgs << "Cannot download map thumbnail. Try again later or useless waypoints / points of interest."
+        end
+
+        if @err then raise ActiveRecord::Rollback end
       end
     end
 
@@ -114,13 +129,6 @@ class MotoRoutesController < ApplicationController
     if !@err
       MotoRoute.transaction do
         data = params[:data]
-
-        puts params[:google_maps_static_api_url]
-        
-        thumbnail_path = Rails.root.join('public', 'route_thumbnails', 'image.png')
-        open(thumbnail_path, 'wb') do |file|
-          file << open(params[:google_maps_static_api_url]).read
-        end
 
         # keep the pois to delete them later
         @existing_pois = @moto_route.point_of_interests.map { |poi| poi }
@@ -174,6 +182,18 @@ class MotoRoutesController < ApplicationController
       end
     end
 
+    # get thumbnail from google maps api
+    # when editing, this will not rollback transaction, previous snapshot will be used
+    begin
+      thumbnail_path = Rails.root.join('public', 'route_thumbnails', @moto_route.id.to_s + '.png')
+      open(thumbnail_path, 'wb') do |file|
+        file << open(params[:google_maps_static_api_url]).read
+      end
+    rescue => error
+      puts error
+      @err = true
+      @msgs << "Cannot download map thumbnail. Try again later or useless waypoints / points of interest."
+    end
 
 
     if @err
