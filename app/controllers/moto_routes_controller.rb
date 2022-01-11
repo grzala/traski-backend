@@ -1,5 +1,5 @@
 class MotoRoutesController < ApplicationController
-  before_action :set_moto_route, only: [:show, :switch_favourite, :vote, :get_user_vote, :is_favourite, :update]
+  before_action :set_moto_route, only: [:show, :switch_favourite, :vote, :get_user_vote, :is_favourite, :update, :destroy]
 
   def index
     render json: {
@@ -27,10 +27,6 @@ class MotoRoutesController < ApplicationController
   def create
 
     is_logged_in?
-
-    # puts params[:data]
-    # puts params[:waypoints]
-    # puts params[:pois]
 
     field_err_msgs = {}
     field_err_msgs[:pois] = {}
@@ -162,7 +158,7 @@ class MotoRoutesController < ApplicationController
         
           # new pois were added, remove previously existing pois
           @existing_pois.each do |poi_to_delete|
-            poi_to_delete.delete
+            poi_to_delete.destroy
           end
       end
     end
@@ -182,7 +178,31 @@ class MotoRoutesController < ApplicationController
     }
   end
 
+  def destroy
+    is_logged_in?
+    route_exists?
 
+    if !@err && @moto_route.user != current_user
+      @err = true
+      @msgs << "You cannot edit this route"
+    end
+
+    if !@err
+      @moto_route.destroy
+    end
+
+
+
+    if @err
+      return render json: {
+        messages: @msgs,
+      }, :status => 401
+    end
+
+    render json: {
+      messages: ["Route removed"]
+    }
+  end
 
   def switch_favourite
     is_logged_in?
