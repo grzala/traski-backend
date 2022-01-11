@@ -1,3 +1,5 @@
+require 'open-uri'
+
 class MotoRoutesController < ApplicationController
   before_action :set_moto_route, only: [:show, :switch_favourite, :vote, :get_user_vote, :is_favourite, :update, :destroy, :can_edit]
 
@@ -112,6 +114,13 @@ class MotoRoutesController < ApplicationController
     if !@err
       MotoRoute.transaction do
         data = params[:data]
+
+        puts params[:google_maps_static_api_url]
+        
+        thumbnail_path = Rails.root.join('public', 'route_thumbnails', 'image.png')
+        open(thumbnail_path, 'wb') do |file|
+          file << open(params[:google_maps_static_api_url]).read
+        end
 
         # keep the pois to delete them later
         @existing_pois = @moto_route.point_of_interests.map { |poi| poi }
