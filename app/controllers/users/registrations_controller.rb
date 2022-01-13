@@ -4,7 +4,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
     # custom action for devise create user
     def create
-        
+
         user = User.new(user_params)
         field_err_msg = {email: nil, password: nil}
 
@@ -13,6 +13,16 @@ class Users::RegistrationsController < Devise::RegistrationsController
                 messages: user.errors.full_messages,
                 field_err_msg: user.errors.to_hash
             }, :status => 401
+        end
+
+
+        avatar_path = Rails.root.join('public', 'avatars', user.id.to_s + '.png')
+        open(avatar_path, 'wb') do |file|
+            # remove file type, just use base64 data
+            file_64 = params[:profile_pic_data]
+            file_64 = file_64.split(",")
+            file_64 = file_64[1...file_64.length].join("")
+            file << Base64.decode64(file_64)
         end
 
 
