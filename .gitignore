@@ -34,8 +34,13 @@
 
 /public/packs
 /public/packs-test
+
 /public/route_thumbnails/*.jpg
 /public/route_thumbnails/*.png
+/public/route_thumbnails/*.jpg
+/public/route_thumbnails/*.png
+!/public/route_thumbnails/placeholder.png
+
 /node_modules
 /yarn-error.log
 yarn-debug.log*
