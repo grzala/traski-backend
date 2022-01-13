@@ -36,6 +36,8 @@ class MotoRoute < ApplicationRecord
     validate :check_at_least_two_coordinates
     validate :lat_and_lng
 
+    after_destroy :remove_thumbnail
+
 
 
     def coordinates
@@ -152,5 +154,10 @@ class MotoRoute < ApplicationRecord
         return
       end
     end
+  end
+
+  def remove_thumbnail
+    thumbnail_path = Rails.root.join('public', 'route_thumbnails', self.id.to_s + '.png')
+    File.delete(thumbnail_path) if File.exist?(thumbnail_path)
   end
 end
