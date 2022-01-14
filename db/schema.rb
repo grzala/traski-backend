@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_11_164718) do
+ActiveRecord::Schema.define(version: 2022_01_14_163253) do
+
+  create_table "accidents", force: :cascade do |t|
+    t.float "latitude"
+    t.float "longitude"
+    t.date "date"
+    t.string "original_id"
+    t.integer "injury", default: 0
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "comments", force: :cascade do |t|
     t.string "message"
