@@ -9,6 +9,7 @@ end
 
 def _get_accidents_data(dateFrom, dateTo)
     # accepted argument format: "degrees*minutes'seconds"
+    # redundant but I will keep it
     degrees_to_dms = lambda2 = ->(x) do
         x = x.split("*")
         degrees = x[0].to_f
@@ -84,30 +85,29 @@ def _get_accidents_data(dateFrom, dateTo)
         html = HTTParty.get(sewik_url + accident_link)
         response = Nokogiri::HTML(html.body)
 
-
-        # puts "SCRIPT SCRPIT"
-        # puts response.css("script")
-
         data = {
             :original_id => accident_link.split("/")[-1],
             :injury => 0
         }
 
+        regex = /LonLat\(.(?<coords>.+\S).\)/x
+        response.css("script").each do |script|
+            if script.inner_html.include? "LonLat("
+                parts = script.inner_html.match(regex)
+                coords = parts[:coords].split(" ,")
+
+                data[:longitude] = coords[0].to_f
+                data[:latitude] = coords[1].to_f
+            end
+        end
+
+
         lis = response.css("li")
 
-        coord_search_string = "Współrzędne geograficzne:"
         date_search_string = "Data:"
         injury_search_string = "Obrażenia:"
         lis.each do |li_element| 
             li_element = li_element.inner_html
-            if (fits_seach_string?(li_element, coord_search_string))
-                coords = li_element.split(": ")[1..-1].join("").split(",")
-
-                # convert to DMS if in degrees
-                coords = coords.map &degrees_to_dms if (coords[0].include? "*")
-                data[:latitude] = coords[1]
-                data[:longitude] = coords[0]
-            end
 
             if (fits_seach_string?(li_element, date_search_string))
                 data[:date] = li_element.split(": ")[1]
@@ -188,8 +188,6 @@ namespace :sewik do
         skipped = 0
         Accident.transaction do
             data.each do |accident_data|
-                puts "inserting data"
-                puts accident_data
                 # ignore accidents with no geolocation. These seem to be extremely rare
                 # blank string checks because in sewik is not reliable and sometimes it gives weird coords that are difficult to parse and result in blank string
                 if accident_data[:latitude] == "" || accident_data[:latitude] == "" || accident_data[:latitude] == nil || accident_data[:longitude] == nil
