@@ -27,8 +27,8 @@ Rails.application.routes.draw do
   end
 
   controller :accidents do
-    get '/accidents', action: :index, as: :index
     post '/accidents', action: :bounds, as: :bounds
+    post '/accidents/filters', action: :get_filtered, as: :get_filtered
   end
 
 
