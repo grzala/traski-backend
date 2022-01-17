@@ -8,7 +8,6 @@ def fits_seach_string?(string_to_search, search_string)
 end
 
 def _get_accidents_data(dateFrom, dateTo)
-    puts "Scraping #{dateFrom} - #{dateTo}"
     # accepted argument format: "degrees*minutes'seconds"
     degrees_to_dms = lambda2 = ->(x) do
         x = x.split("*")
@@ -73,6 +72,7 @@ def _get_accidents_data(dateFrom, dateTo)
     results = results[1...results.length]
 
     results = results.map { |item| item.css('a').attr("href").to_s }
+    puts "Scraping #{dateFrom} - #{dateTo} : #{results.length} accidents"
 
     # for debug
     # results = [results[1]]
@@ -83,6 +83,10 @@ def _get_accidents_data(dateFrom, dateTo)
     results.each_with_index do |accident_link, i|
         html = HTTParty.get(sewik_url + accident_link)
         response = Nokogiri::HTML(html.body)
+
+
+        # puts "SCRIPT SCRPIT"
+        # puts response.css("script")
 
         data = {
             :original_id => accident_link.split("/")[-1],
@@ -181,10 +185,15 @@ namespace :sewik do
         puts "Data scraped, inserting to db"
         new_accidents = []
         
+        skipped = 0
         Accident.transaction do
             data.each do |accident_data|
-                # ignore accidents with no geolocation. These are rare
-                if accident_data[:latitude] == nil || accident_data[:longitude] == nil
+                puts "inserting data"
+                puts accident_data
+                # ignore accidents with no geolocation. These seem to be extremely rare
+                # blank string checks because in sewik is not reliable and sometimes it gives weird coords that are difficult to parse and result in blank string
+                if accident_data[:latitude] == "" || accident_data[:latitude] == "" || accident_data[:latitude] == nil || accident_data[:longitude] == nil
+                    skipped += 1
                     next
                 end
 
@@ -195,6 +204,8 @@ namespace :sewik do
                 end
             end
         end
+
+        puts "Skipped #{skipped} accidents because of no geolocation"
         puts "Inserted " + new_accidents.length.to_s + " accidents"
 
     end

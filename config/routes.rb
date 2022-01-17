@@ -26,6 +26,11 @@ Rails.application.routes.draw do
     post '/moto_routes/:moto_route_id/comments', action: :create, as: :create_comment
   end
 
+  controller :accidents do
+    get '/accidents', action: :index, as: :index
+    post '/accidents', action: :bounds, as: :bounds
+  end
+
 
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
