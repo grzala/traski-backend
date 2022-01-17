@@ -8,6 +8,7 @@ def fits_seach_string?(string_to_search, search_string)
 end
 
 def _get_accidents_data(dateFrom, dateTo)
+    puts "Scraping #{dateFrom} - #{dateTo}"
     # accepted argument format: "degrees*minutes'seconds"
     degrees_to_dms = lambda2 = ->(x) do
         x = x.split("*")
@@ -79,7 +80,7 @@ def _get_accidents_data(dateFrom, dateTo)
 
     accident_data = []
 
-    results.each do |accident_link|
+    results.each_with_index do |accident_link, i|
         html = HTTParty.get(sewik_url + accident_link)
         response = Nokogiri::HTML(html.body)
 
@@ -160,8 +161,13 @@ namespace :sewik do
             fail
         end
 
-        dateFrom = Date::strptime(args[:dateFrom], "%Y-%m-%d")
-        dateTo = Date::strptime(args[:dateTo], "%Y-%m-%d")
+        begin 
+            dateFrom = Date::strptime(args[:dateFrom], "%Y-%m-%d")
+            dateTo = Date::strptime(args[:dateTo], "%Y-%m-%d")
+        rescue
+            puts 'Requires dateFrom and dateTo as arguments (%Y-%m-%d). Both dates are inclusive. Call task using rake sewik:scrape[dateFrom, dateTo]'
+            fail
+        end
 
         if (dateTo < dateFrom) 
             puts "dateTo must be bigger than dateFrom"
