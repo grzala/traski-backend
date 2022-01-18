@@ -23,6 +23,7 @@ Rails.application.routes.draw do
     get '/moto_routes/user_favourites/:page', action: :user_favourites, as: :user_favourites
 
     get '/moto_routes/recent', action: :get_recent, as: :recent_routes
+    post '/moto_routes/in_area', action: :get_in_area, as: :in_area_routes
 
   end
   resources :moto_routes

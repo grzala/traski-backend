@@ -196,6 +196,66 @@ class MotoRoutesController < ApplicationController
       :with_poi_count => true
   end
 
+  def get_in_area
+    routes_in_area = []
+    point = params[:point]
+
+    if point.nil?
+      return render json: {
+        messages: ["Pass a point in relation to which moto routes are returned ({lat: number, lng: number})"],
+      }, :status => 400
+    end
+
+    all_routes = MotoRoute.all
+
+    enough_routes = 20
+
+    steps = [0.02, 0.06, 0.10]
+
+    tiers = [[], [], []]
+    all_routes.each do |route|
+      distance_lng = (point[:lng] - route.average_lng)/2.0
+      distance_lat = (point[:lat] - route.average_lat)/2.0
+      distance_sqr = (distance_lng * distance_lng) + (distance_lat * distance_lat)
+
+      if distance_sqr <= steps[0]
+        tiers[0] << {
+          route: route,
+          distance_sqr: distance_sqr
+        }
+      elsif distance_sqr <= steps[1]
+        tiers[1]<< {
+          route: route,
+          distance_sqr: distance_sqr
+        }
+      elsif distance_sqr <= steps[2]
+        tiers[2] << {
+          route: route,
+          distance_sqr: distance_sqr
+        }
+      end
+    end
+
+    tiers[0] = tiers[0].sort_by {|obj| obj[:distance_sqr]}
+    tiers[1] = tiers[1].sort_by {|obj| obj[:distance_sqr]}
+    tiers[2] = tiers[2].sort_by {|obj| obj[:distance_sqr]}
+
+    i = 0
+    while i < tiers.length && routes_in_area.length < enough_routes
+      j = 0
+      while j < tiers[i].length
+        routes_in_area << tiers[i][j][:route]
+        j += 1
+      end
+      i += 1
+    end
+
+    render json: {
+      moto_routes: routes_in_area
+    }, :include => [:point_of_interests],
+      :with_poi_count => true
+  end
+
   
   def update
 
