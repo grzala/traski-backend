@@ -18,6 +18,8 @@ Rails.application.routes.draw do
     get '/moto_routes/:id/get_user_vote', action: :get_user_vote, as: :get_user_route_vote
     get '/moto_routes/:id/can_edit', action: :can_edit, as: :can_edit
     get '/moto_routes/top/:page', action: :get_top, as: :get_top
+    get '/moto_routes/user_routes/:page', action: :user_routes, as: :user_routes
+    get '/moto_routes/user_favourites/:page', action: :user_favourites, as: :user_favourites
 
   end
 

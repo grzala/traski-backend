@@ -40,7 +40,8 @@ class MotoRoute < ApplicationRecord
 
     PER_PAGE_TOP = 10
     scope :get_top, -> (offset) { order(score: :desc).limit(PER_PAGE_TOP).offset(offset) }
-
+    PER_PAGE_USER_ROUTES = 10
+    scope :get_user_routes, -> (user, offset) { where(user: user).order(date_created: :desc).limit(PER_PAGE_USER_ROUTES).offset(offset) }
 
 
     def coordinates

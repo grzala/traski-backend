@@ -31,6 +31,64 @@ class MotoRoutesController < ApplicationController
       :with_poi_count => true
   end
 
+  def user_routes
+    is_logged_in?
+
+    if @err
+      return render json: {
+        messages: @msgs,
+        field_err_msgs: field_err_msgs,
+      }, :status => 401
+    end
+
+    page_no = Integer params[:page]
+
+    min_page = 1
+
+    total_routes = MotoRoute.where(user: current_user).count
+    max_page = (total_routes.to_f / MotoRoute::PER_PAGE_USER_ROUTES.to_f).ceil
+
+    page_no = min_page if page_no < min_page
+    page_no = max_page if page_no > max_page
+
+    render json: {
+      moto_routes: MotoRoute.get_user_routes(current_user, (page_no - 1) * MotoRoute::PER_PAGE_USER_ROUTES),
+      max_page: max_page,
+      total_routes: total_routes,
+      page: page_no
+    }, :include => [:point_of_interests],
+      :with_poi_count => true
+  end
+
+  def user_favourites
+    is_logged_in?
+
+    if @err
+      return render json: {
+        messages: @msgs,
+        field_err_msgs: field_err_msgs,
+      }, :status => 401
+    end
+
+    page_no = Integer params[:page]
+
+    min_page = 1
+
+    total_routes = MotoRouteFavourite.where(user: current_user).count
+    max_page = (total_routes.to_f / MotoRouteFavourite::PER_PAGE_USER_FAVOURITES.to_f).ceil
+
+    page_no = min_page if page_no < min_page
+    page_no = max_page if page_no > max_page
+
+    render json: {
+      moto_routes: MotoRouteFavourite.get_user_favourites(current_user, (page_no - 1) * MotoRouteFavourite::PER_PAGE_USER_FAVOURITES).map(&:moto_route),
+      max_page: max_page,
+      total_routes: total_routes,
+      page: page_no
+    }, :include => [:point_of_interests],
+      :with_poi_count => true
+  end
+
   def show
     route_exists?
 
