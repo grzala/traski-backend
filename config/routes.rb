@@ -10,18 +10,22 @@ Rails.application.routes.draw do
     delete '/session', action: :destroy, as: :logout
   end
 
-  resources :moto_routes
   controller :moto_routes do
     get '/moto_routes/:id/is_favourite', action: :is_favourite, as: :is_route_favourite
     post '/moto_routes/switch_favourite', action: :switch_favourite, as: :switch_route_favourite
     post '/moto_routes/cast_rating_vote', action: :vote, as: :route_vote
     get '/moto_routes/:id/get_user_vote', action: :get_user_vote, as: :get_user_route_vote
+
     get '/moto_routes/:id/can_edit', action: :can_edit, as: :can_edit
+
     get '/moto_routes/top/:page', action: :get_top, as: :get_top
     get '/moto_routes/user_routes/:page', action: :user_routes, as: :user_routes
     get '/moto_routes/user_favourites/:page', action: :user_favourites, as: :user_favourites
 
+    get '/moto_routes/recent', action: :get_recent, as: :recent_routes
+
   end
+  resources :moto_routes
 
   resources :comments, only: [:destroy]
   controller :comments do

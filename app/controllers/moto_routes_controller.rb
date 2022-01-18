@@ -189,6 +189,13 @@ class MotoRoutesController < ApplicationController
     }
   end
 
+  def get_recent
+    render json: {
+      moto_routes: MotoRoute.get_most_recent(10)
+    }, :include => [:point_of_interests],
+      :with_poi_count => true
+  end
+
   
   def update
 
