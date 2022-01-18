@@ -38,6 +38,9 @@ class MotoRoute < ApplicationRecord
 
     after_destroy :remove_thumbnail
 
+    PER_PAGE_TOP = 10
+    scope :get_top, -> (offset) { order(score: :desc).limit(PER_PAGE_TOP).offset(offset) }
+
 
 
     def coordinates

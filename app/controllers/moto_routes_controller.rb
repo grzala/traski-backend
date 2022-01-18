@@ -5,7 +5,26 @@ class MotoRoutesController < ApplicationController
 
   def index
     render json: {
-      moto_routes: MotoRoute.all
+      moto_routes: MotoRoute.get_top(0)
+    }, :include => [:point_of_interests],
+      :with_poi_count => true
+  end
+
+  def get_top
+    page_no = Integer params[:page]
+
+    min_page = 1
+    max_page = (MotoRoute.all.count.to_f / MotoRoute::PER_PAGE_TOP.to_f).ceil
+
+    page_no = min_page if page_no < min_page
+    page_no = max_page if page_no > max_page
+
+
+
+    render json: {
+      moto_routes: MotoRoute.get_top((page_no - 1) * MotoRoute::PER_PAGE_TOP),
+      max_page: max_page,
+      page: page_no
     }, :include => [:point_of_interests],
       :with_poi_count => true
   end

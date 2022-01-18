@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     post '/moto_routes/cast_rating_vote', action: :vote, as: :route_vote
     get '/moto_routes/:id/get_user_vote', action: :get_user_vote, as: :get_user_route_vote
     get '/moto_routes/:id/can_edit', action: :can_edit, as: :can_edit
+    get '/moto_routes/top/:page', action: :get_top, as: :get_top
 
   end
 
