@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_14_163253) do
+ActiveRecord::Schema.define(version: 2022_01_18_173729) do
 
   create_table "accidents", force: :cascade do |t|
     t.float "latitude"
@@ -68,6 +68,8 @@ ActiveRecord::Schema.define(version: 2022_01_14_163253) do
     t.datetime "updated_at", precision: 6, null: false
     t.float "score", default: 0.0
     t.float "distance", default: 0.0
+    t.float "average_lng", default: 0.0
+    t.float "average_lat", default: 0.0
     t.index ["user_id"], name: "index_moto_routes_on_user_id"
   end
 

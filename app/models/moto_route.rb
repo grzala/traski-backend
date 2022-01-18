@@ -36,6 +36,7 @@ class MotoRoute < ApplicationRecord
     validate :check_at_least_two_coordinates
     validate :lat_and_lng
 
+    before_save :calculate_average_point
     after_destroy :remove_thumbnail
 
     PER_PAGE_TOP = 10
@@ -50,6 +51,10 @@ class MotoRoute < ApplicationRecord
 
     def coordinates=(coords_obj)
         self.coordinates_json_string = coords_obj.to_json
+    end
+
+    def average_point
+      return {lng: self.average_lng, lat: self.average_lat}
     end
 
     def is_favourite?(user)
@@ -101,7 +106,8 @@ class MotoRoute < ApplicationRecord
   def serializable_hash(options={})
     to_return = super.merge ({
         :coordinates => self.coordinates,
-        :score => self.score
+        :score => self.score,
+        :average_point => self.average_point
     })
     
     if options[:with_user]
@@ -163,5 +169,24 @@ class MotoRoute < ApplicationRecord
   def remove_thumbnail
     thumbnail_path = Rails.root.join('public', 'route_thumbnails', self.id.to_s + '.png')
     File.delete(thumbnail_path) if File.exist?(thumbnail_path)
+  end
+
+  def calculate_average_point
+    coordinates = self.coordinates
+
+    count = coordinates.length
+    avg_lng = 0.0
+    avg_lat = 0.0
+
+    coordinates.each do |point|
+      avg_lng += point['lng']
+      avg_lat += point['lat']
+    end
+
+    avg_lng /= count
+    avg_lat /= count
+
+    self.average_lng = avg_lng
+    self.average_lat = avg_lat
   end
 end
