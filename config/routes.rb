@@ -25,6 +25,8 @@ Rails.application.routes.draw do
     get '/moto_routes/recent', action: :get_recent, as: :recent_routes
     post '/moto_routes/in_area', action: :get_in_area, as: :in_area_routes
 
+    post '/moto_routes/search/:page', action: :search, as: :search
+
   end
   resources :moto_routes
 

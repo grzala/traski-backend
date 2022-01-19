@@ -119,6 +119,39 @@ class MotoRoutesController < ApplicationController
        :with_user => current_user
   end
 
+  def search
+    if params[:search_string].nil?
+      @err = true
+      @msgs << "Please provide a search string"
+    end
+
+
+    if @err
+      return render json: {
+        messages: @msgs
+      }, :status => 401
+    end
+
+    page_no = 1
+    if !params[:page].nil?
+      page_no = Integer params[:page]
+    end
+
+    ROUTES_PER_PAGE = 10
+
+    total_routes = MotoRouteFavourite.where(user: current_user).count
+    max_page = (total_routes.to_f / ROUTES_PER_PAGE.to_f).ceil
+
+    page_no = max_page if page_no > max_page
+
+    render json: {
+      moto_routes: [],
+      total_routes: 0
+    }, :include => [:point_of_interests],
+      :with_poi_count => true
+
+  end
+
   def create
 
     is_logged_in?
