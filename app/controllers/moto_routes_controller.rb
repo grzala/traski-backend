@@ -32,7 +32,20 @@ class MotoRoutesController < ApplicationController
   end
 
   def user_routes
-    is_logged_in?
+    user_id = params[:user_id]
+    if user_id.nil?
+      @err = true
+      @msgs << "Please provide user id"
+    end
+
+    
+    if !@err 
+      @user = User.find(user_id)
+      if @user.nil?
+        @err = true
+        @msgs << "There is no user with id #{user_id}"
+      end
+    end
 
     if @err
       return render json: {
@@ -45,17 +58,18 @@ class MotoRoutesController < ApplicationController
 
     min_page = 1
 
-    total_routes = MotoRoute.where(user: current_user).count
+    total_routes = MotoRoute.where(user: @user).count
     max_page = (total_routes.to_f / MotoRoute::PER_PAGE_USER_ROUTES.to_f).ceil
 
     page_no = min_page if page_no < min_page
     page_no = max_page if page_no > max_page
 
     render json: {
-      moto_routes: MotoRoute.get_user_routes(current_user, (page_no - 1) * MotoRoute::PER_PAGE_USER_ROUTES),
+      moto_routes: MotoRoute.get_user_routes(@user, (page_no - 1) * MotoRoute::PER_PAGE_USER_ROUTES),
       max_page: max_page,
       total_routes: total_routes,
-      page: page_no
+      page: page_no,
+      user_full_name: @user.full_name
     }, :include => [:point_of_interests],
       :with_poi_count => true
   end
