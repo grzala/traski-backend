@@ -11,6 +11,8 @@ Rails.application.routes.draw do
   end
 
   controller :moto_routes do
+    post '/moto_routes/search/:page', action: :search, as: :search
+    
     get '/moto_routes/:id/is_favourite', action: :is_favourite, as: :is_route_favourite
     post '/moto_routes/switch_favourite', action: :switch_favourite, as: :switch_route_favourite
     post '/moto_routes/cast_rating_vote', action: :vote, as: :route_vote
@@ -25,7 +27,6 @@ Rails.application.routes.draw do
     get '/moto_routes/recent', action: :get_recent, as: :recent_routes
     post '/moto_routes/in_area', action: :get_in_area, as: :in_area_routes
 
-    post '/moto_routes/search/:page', action: :search, as: :search
 
   end
   resources :moto_routes

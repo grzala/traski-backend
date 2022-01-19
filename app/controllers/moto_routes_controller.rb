@@ -3,6 +3,8 @@ require 'open-uri'
 class MotoRoutesController < ApplicationController
   before_action :set_moto_route, only: [:show, :switch_favourite, :vote, :get_user_vote, :is_favourite, :update, :destroy, :can_edit]
 
+  SEARCH_ROTUES_PER_PAGE = 10
+
   def index
     render json: {
       moto_routes: MotoRoute.get_top(0)
@@ -132,21 +134,28 @@ class MotoRoutesController < ApplicationController
       }, :status => 401
     end
 
+    search_string = params[:search_string].downcase
     page_no = 1
     if !params[:page].nil?
       page_no = Integer params[:page]
     end
 
-    ROUTES_PER_PAGE = 10
+    results = []
+    results += MotoRoute.all.where("lower(name) LIKE :search", search: "%#{search_string}%")
+    results += MotoRoute.all.where("lower(description) LIKE :search", search: "%#{search_string}%")
 
-    total_routes = MotoRouteFavourite.where(user: current_user).count
-    max_page = (total_routes.to_f / ROUTES_PER_PAGE.to_f).ceil
+
+    total_routes = results.length
+    max_page = (total_routes.to_f / SEARCH_ROTUES_PER_PAGE.to_f).ceil
 
     page_no = max_page if page_no > max_page
+    offset = ((page_no-1) * SEARCH_ROTUES_PER_PAGE)
+    
+    results = results[offset...offset + SEARCH_ROTUES_PER_PAGE] if results.length > SEARCH_ROTUES_PER_PAGE
 
     render json: {
-      moto_routes: [],
-      total_routes: 0
+      moto_routes: results,
+      total_routes: total_routes
     }, :include => [:point_of_interests],
       :with_poi_count => true
 
@@ -213,7 +222,6 @@ class MotoRoutesController < ApplicationController
             file << open(params[:google_maps_static_api_url]).read
           end
         rescue => error
-          puts error
           @err = true
           @msgs << "Cannot download map thumbnail. Try again later or useless waypoints / points of interest."
         end
