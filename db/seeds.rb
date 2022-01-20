@@ -35,7 +35,11 @@ FileUtils.cp(USER_PLACEHOLDER_AVATAR_PATH, USER_AVATAR_FOLDER_PATH)
 end
 
 
-# Routes
+# ROUTES
+
+ROUTE_THUMBNAIL_SEED_PATH = "./db/seeds/route_thumbnails"
+ROUTE_THUMBNAIL_FOLDER_PATH = "./public/route_thumbnails"
 MotoRoutesSeed::MOTO_ROUTES.each_with_index do |moto_route, i|
-    MotoRoute.create!(moto_route.merge({user: added_users[i % added_users.length]}))
+    #route = MotoRoute.create!(moto_route.merge({user: added_users[i % added_users.length]}))
+    #FileUtils.cp("#{ROUTE_THUMBNAIL_SEED_PATH}/#{i}.png", "#{ROUTE_THUMBNAIL_FOLDER_PATH}/#{route.id}.png")
 end

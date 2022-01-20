@@ -135,11 +135,11 @@ class MotoRoute < ApplicationRecord
   end
 
 
-  private
-  # Allow setting json coordinates only privately to control what string is being saved into this attribute
   def coordinates_json_string=(new_coords)
     write_attribute(:coordinates_json_string, new_coords)
   end
+  
+  private
 
   def check_coordinate_duplicates
     coordinates = self.coordinates
