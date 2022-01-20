@@ -1,0 +1,8 @@
+i=0
+find . -type f | while read FN; do
+  BFN=$(basename "$FN")
+  NFN=${i}
+  echo "$BFN -> $NFN"
+  cp "$FN" "yayo/$NFN.png"
+  i=$((i+1))
+done

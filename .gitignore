@@ -41,12 +41,17 @@
 /public/route_thumbnails/*.png
 !/public/route_thumbnails/placeholder.png
 
+/public/avatars/*.jpg
+/public/avatars/*.png
+/public/avatars/*.jpg
+/public/avatars/*.png
+!/public/avatars/placeholder.png
+
 /node_modules
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity
 
-./exports/*
-!./exports/
-./exports/img*
+./exports/*.json
+./exports/img/*
 !./exports/img
