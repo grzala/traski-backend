@@ -269,6 +269,9 @@ class MotoRoutesController < ApplicationController
 
     tiers = [[], [], []]
     all_routes.each do |route|
+      if !params[:current_route_id].nil?
+          next if route.id == params[:current_route_id]
+      end
       distance_lng = (point[:lng] - route.average_lng)/2.0
       distance_lat = (point[:lat] - route.average_lat)/2.0
       distance_sqr = (distance_lng * distance_lng) + (distance_lat * distance_lat)
