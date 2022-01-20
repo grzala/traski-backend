@@ -72,6 +72,10 @@ def _get_accidents_data(dateFrom, dateTo)
     results = post_response.css("table").css("tr")
     results = results[1...results.length]
 
+    if results.nil? || results.length <=0
+        return []
+    end
+
     results = results.map { |item| item.css('a').attr("href").to_s }
     puts "Scraping #{dateFrom} - #{dateTo} : #{results.length} accidents"
 
