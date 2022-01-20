@@ -11,6 +11,7 @@
 # unless ENV["var"]
 
 require_relative 'seeds/motoroutes.rb'
+require_relative 'seeds/comments.rb'
 
 # USERS
 
@@ -58,10 +59,12 @@ end
 
 FEEDBACK_TYPES = [:NEGATIVE, :INDIFFERENT, :POSITIVE]
 
+RATING_PROBS = [0.15, 0.45, 1.0]
+
 RATINGS = {
-    NEGATIVE: [1],
+    NEGATIVE: [1, 2],
     INDIFFERENT: [2, 3],
-    POSITIVE: [3, 4],
+    POSITIVE: [4, 5],
 }
 
 
@@ -71,7 +74,13 @@ USER_ADD_TO_FAVS_PROB = 0.3
 
 User.all.each do |user|
     MotoRoute.all.each do |route|
-        type = FEEDBACK_TYPES.sample
+        type = :POSITIVE
+        type_random_no = rand(0.0..1.0)
+        if type_random_no <= RATING_PROBS[0]
+            type = :NEGATIVE
+        elsif type_random_no <= RATING_PROBS[1]
+            type = :INDIFFERENT
+        end
 
         if rand(0.0..1.0) <= USER_LEAVE_RATING_PROB
             rating = RATINGS[type].sample
@@ -83,7 +92,8 @@ User.all.each do |user|
         end
 
         if rand(0.0..1.0) <= USER_LEAVE_COMMENT_PROB
-            Comment.create!(user: user, moto_route: route, message: "Ciućkaj dupe")
+            CommentsSeed::COMMENTS[type].sample
+            Comment.create!(user: user, moto_route: route, message: CommentsSeed::COMMENTS[type].sample)
         end
     end
 end
