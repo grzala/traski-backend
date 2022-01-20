@@ -26,7 +26,7 @@ last_names = [
 ]
 
 
-if ActiveReco7rd::Base.connection.data_source_exists? 'users'
+if ActiveRecord::Base.connection.data_source_exists? 'users'
     FactoryBot.define do
         factory :user do
             sequence(:email, User.last.nil? ? 1 : User.last.id + 1) { |n| "test#{n}@mail.com" }
