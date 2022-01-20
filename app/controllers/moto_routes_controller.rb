@@ -265,7 +265,7 @@ class MotoRoutesController < ApplicationController
 
     enough_routes = 20
 
-    steps = [0.02, 0.06, 0.10]
+    steps = [0.04, 0.12, 0.20]
 
     tiers = [[], [], []]
     all_routes.each do |route|
