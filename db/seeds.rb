@@ -52,3 +52,38 @@ MotoRoutesSeed::MOTO_ROUTES.each_with_index do |moto_route, i|
         PointOfInterest.create!(poi.merge({moto_route: route}))
     end
 end
+
+
+# COMMENTS, FAVS AND RATINGS
+
+FEEDBACK_TYPES = [:NEGATIVE, :INDIFFERENT, :POSITIVE]
+
+RATINGS = {
+    NEGATIVE: [1],
+    INDIFFERENT: [2, 3],
+    POSITIVE: [3, 4],
+}
+
+
+USER_LEAVE_COMMENT_PROB = 0.2
+USER_LEAVE_RATING_PROB = 0.6
+USER_ADD_TO_FAVS_PROB = 0.3
+
+User.all.each do |user|
+    MotoRoute.all.each do |route|
+        type = FEEDBACK_TYPES.sample
+
+        if rand(0.0..1.0) <= USER_LEAVE_RATING_PROB
+            rating = RATINGS[type].sample
+            MotoRouteVote.create!(user: user, moto_route: route, score: rating)
+        end
+
+        if rand(0.0..1.0) <= USER_ADD_TO_FAVS_PROB
+            MotoRouteFavourite.create!(user: user, moto_route: route)
+        end
+
+        if rand(0.0..1.0) <= USER_LEAVE_COMMENT_PROB
+            Comment.create!(user: user, moto_route: route, message: "Ciućkaj dupe")
+        end
+    end
+end
