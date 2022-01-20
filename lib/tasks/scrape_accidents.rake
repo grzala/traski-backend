@@ -201,8 +201,12 @@ namespace :sewik do
 
                 # ignore duplicates
                 if Accident.find_by(original_id: accident_data[:original_id]) == nil
-                    accident = Accident.create!(accident_data)
-                    new_accidents << accident
+                    accident = Accident.new(accident_data)
+
+                    # using create! caused an very rare error where coordinates weren't right
+                    if accident.save
+                        new_accidents << accident
+                    end
                 end
             end
         end
