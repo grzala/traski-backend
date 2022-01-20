@@ -40,6 +40,15 @@ end
 ROUTE_THUMBNAIL_SEED_PATH = "./db/seeds/route_thumbnails"
 ROUTE_THUMBNAIL_FOLDER_PATH = "./public/route_thumbnails"
 MotoRoutesSeed::MOTO_ROUTES.each_with_index do |moto_route, i|
-    #route = MotoRoute.create!(moto_route.merge({user: added_users[i % added_users.length]}))
-    #FileUtils.cp("#{ROUTE_THUMBNAIL_SEED_PATH}/#{i}.png", "#{ROUTE_THUMBNAIL_FOLDER_PATH}/#{route.id}.png")
+    moto_route.delete(:id)
+    pois = moto_route.delete(:point_of_interests)
+
+    route = MotoRoute.create!(moto_route.merge({user: added_users[i % added_users.length]}))
+    FileUtils.cp("#{ROUTE_THUMBNAIL_SEED_PATH}/#{i}.png", "#{ROUTE_THUMBNAIL_FOLDER_PATH}/#{route.id}.png")
+
+    pois.each do |poi|
+        poi.delete(:id)
+
+        PointOfInterest.create!(poi.merge({moto_route: route}))
+    end
 end

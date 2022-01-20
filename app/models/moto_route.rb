@@ -59,6 +59,11 @@ class MotoRoute < ApplicationRecord
       return {lng: self.average_lng, lat: self.average_lat}
     end
 
+    def average_point=(avg_point)
+      self.average_lng = avg_point[:lng]
+      self.average_lat = avg_point[:lat]
+    end
+
     def is_favourite?(user)
       # Ternary operator needs to be here, otherwise nil was returned instead of false
       return user && MotoRouteFavourite.find_by(user: user, moto_route: self) ? true : false
@@ -138,7 +143,7 @@ class MotoRoute < ApplicationRecord
   def coordinates_json_string=(new_coords)
     write_attribute(:coordinates_json_string, new_coords)
   end
-  
+
   private
 
   def check_coordinate_duplicates
