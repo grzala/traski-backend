@@ -22,6 +22,8 @@ USER_PLACEHOLDER_AVATAR_PATH = "./db/seeds/avatars/placeholder.png"
 
 added_users = []
 
+puts "seeding users..."
+
 # Remove all avatars
 FileUtils.rm_rf Dir["#{USER_AVATAR_FOLDER_PATH}/*"] if USER_AVATAR_FOLDER_PATH.present?
 
@@ -38,6 +40,7 @@ end
 
 
 # ROUTES
+puts "seeding routes..."
 
 ROUTE_THUMBNAIL_SEED_PATH = "./db/seeds/route_thumbnails"
 ROUTE_THUMBNAIL_FOLDER_PATH = "./public/route_thumbnails"
@@ -58,6 +61,7 @@ end
 
 
 # COMMENTS, FAVS AND RATINGS
+puts "seeding comments and ratings..."
 
 FEEDBACK_TYPES = [:NEGATIVE, :INDIFFERENT, :POSITIVE]
 
