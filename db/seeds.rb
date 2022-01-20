@@ -54,7 +54,7 @@ MotoRoutesSeed::MOTO_ROUTES.each_with_index do |moto_route, i|
     route = MotoRoute.create!(moto_route.merge({user_id: author_id}))
     FileUtils.cp("#{ROUTE_THUMBNAIL_SEED_PATH}/#{i}.png", "#{ROUTE_THUMBNAIL_FOLDER_PATH}/#{route.id}.png")
     puts "#{ROUTE_THUMBNAIL_SEED_PATH}/#{i}.png"
-    puts "#{ROUTE_THUMBNAIL_FOLDER_PATH}/#{route.id}.png""
+    puts "#{ROUTE_THUMBNAIL_FOLDER_PATH}/#{route.id}.png"
 
     pois.each do |poi|
         poi.delete(:id)
