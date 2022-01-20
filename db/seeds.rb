@@ -16,9 +16,9 @@ require_relative 'seeds/comments.rb'
 # USERS
 
 USER_COUNT = 40
-USER_AVATAR_FOLDER_PATH = Rails.root + "public/avatars"
-USER_SEED_AVATAR_PATH = Rails.root + "db/seeds/avatars"
-USER_PLACEHOLDER_AVATAR_PATH = Rails.root + "db/seeds/avatars/placeholder.png"
+USER_AVATAR_FOLDER_PATH = Rails.root + (Rails.env == "production" ? "/app" : "") + "public/avatars"
+USER_SEED_AVATAR_PATH = Rails.root + (Rails.env == "production" ? "/app" : "") + "db/seeds/avatars"
+USER_PLACEHOLDER_AVATAR_PATH = Rails.root + (Rails.env == "production" ? "/app" : "") + "db/seeds/avatars/placeholder.png"
 
 added_users = []
 
@@ -44,8 +44,8 @@ end
 # ROUTES
 puts "seeding routes..."
 
-ROUTE_THUMBNAIL_SEED_PATH = Rails.root + "db/seeds/route_thumbnails"
-ROUTE_THUMBNAIL_FOLDER_PATH = Rails.root + "public/route_thumbnails"
+ROUTE_THUMBNAIL_SEED_PATH = Rails.root + (Rails.env == "production" ? "/app" : "") + "db/seeds/route_thumbnails"
+ROUTE_THUMBNAIL_FOLDER_PATH = Rails.root + (Rails.env == "production" ? "/app" : "") + "public/route_thumbnails"
 MotoRoutesSeed::MOTO_ROUTES.each_with_index do |moto_route, i|
     moto_route.delete(:id)
     pois = moto_route.delete(:point_of_interests)
