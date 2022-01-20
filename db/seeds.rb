@@ -30,7 +30,7 @@ FileUtils.cp(USER_PLACEHOLDER_AVATAR_PATH, USER_AVATAR_FOLDER_PATH)
 
 # Create users with avatars
 # don't create routes as all of the users
-(0...USER_COUNT/4).each do |i|
+(0...USER_COUNT).each do |i|
     user = FactoryBot.create(:user)
     added_users << user
     FileUtils.cp("#{USER_SEED_AVATAR_PATH}/#{user.id}.png", "#{USER_AVATAR_FOLDER_PATH}/#{user.id}.png")
@@ -44,7 +44,7 @@ ROUTE_THUMBNAIL_FOLDER_PATH = "./public/route_thumbnails"
 MotoRoutesSeed::MOTO_ROUTES.each_with_index do |moto_route, i|
     moto_route.delete(:id)
     pois = moto_route.delete(:point_of_interests)
-    author_id = rand(1..USER_COUNT)
+    author_id = rand(1..USER_COUNT/4)
 
     route = MotoRoute.create!(moto_route.merge({user_id: author_id}))
     FileUtils.cp("#{ROUTE_THUMBNAIL_SEED_PATH}/#{i}.png", "#{ROUTE_THUMBNAIL_FOLDER_PATH}/#{route.id}.png")
