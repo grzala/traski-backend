@@ -37,7 +37,7 @@ FileUtils.cp(USER_PLACEHOLDER_AVATAR_PATH, USER_AVATAR_FOLDER_PATH)
     added_users << user
     puts "COPYING FROM " + "#{USER_SEED_AVATAR_PATH}/#{user.id}.png"
     puts "COPYING TO " + "#{USER_AVATAR_FOLDER_PATH}/#{user.id}.png"
-    FileUtils.cp("#{USER_SEED_AVATAR_PATH}/#{user.id}.png", "#{USER_AVATAR_FOLDER_PATH}/#{user.id}.png")
+    FileUtils.cp("#{USER_SEED_AVATAR_PATH}/#{user.id}.png", "#{USER_AVATAR_FOLDER_PATH}/#{user.id}.png", verbose: true)
 end
 
 
@@ -52,9 +52,9 @@ MotoRoutesSeed::MOTO_ROUTES.each_with_index do |moto_route, i|
     author_id = rand(1..USER_COUNT/4)
 
     route = MotoRoute.create!(moto_route.merge({user_id: author_id}))
-    FileUtils.cp("#{ROUTE_THUMBNAIL_SEED_PATH}/#{i}.png", "#{ROUTE_THUMBNAIL_FOLDER_PATH}/#{route.id}.png")
     puts "COPYING FROM: " + "#{ROUTE_THUMBNAIL_SEED_PATH}/#{i}.png"
     puts "COPYING TO: " + "#{ROUTE_THUMBNAIL_FOLDER_PATH}/#{route.id}.png"
+    FileUtils.cp("#{ROUTE_THUMBNAIL_SEED_PATH}/#{i}.png", "#{ROUTE_THUMBNAIL_FOLDER_PATH}/#{route.id}.png", verbose: true)
 
     pois.each do |poi|
         poi.delete(:id)
