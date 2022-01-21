@@ -143,6 +143,7 @@ class MotoRoutesController < ApplicationController
     results = []
     results += MotoRoute.all.where("lower(name) LIKE :search", search: "%#{search_string}%")
     results += MotoRoute.all.where("lower(description) LIKE :search", search: "%#{search_string}%")
+    results = results.uniq
 
 
     total_routes = results.length
