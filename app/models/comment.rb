@@ -10,7 +10,7 @@ class Comment < ApplicationRecord
     def serializable_hash(options={})
         super.merge ({
             :author => self.user.full_name,
-            :author_avatar_url => self.user.avatar.url,
+            :author_avatar_url => self.user.avatar.url
         })
     end
 
