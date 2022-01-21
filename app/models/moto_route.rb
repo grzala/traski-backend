@@ -5,6 +5,8 @@ class MotoRoute < ApplicationRecord
     has_many :moto_route_votes, dependent: :destroy
     has_many :comments, -> {order "created_at DESC"} , dependent: :destroy
 
+    has_one_attached :thumbnail
+
 
     validates_presence_of :user, :name, :description, :coordinates_json_string,
                             :time_to_complete_h, :time_to_complete_m, :difficulty, :distance
@@ -114,7 +116,8 @@ class MotoRoute < ApplicationRecord
     to_return = super.merge ({
         :coordinates => self.coordinates,
         :score => self.score,
-        :average_point => self.average_point
+        :average_point => self.average_point,
+        :thumbnail_url => url_for(self.thumbnail)
     })
     
     if options[:with_user]

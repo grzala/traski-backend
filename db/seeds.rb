@@ -50,7 +50,7 @@ MotoRoutesSeed::MOTO_ROUTES.each_with_index do |moto_route, i|
     author_id = rand(1..USER_COUNT/4)
 
     route = MotoRoute.create!(moto_route.merge({user_id: author_id}))
-    FileUtils.cp("#{ROUTE_THUMBNAIL_SEED_PATH}/#{i}.png", "#{ROUTE_THUMBNAIL_FOLDER_PATH}/#{route.id}.png")
+    #FileUtils.cp("#{ROUTE_THUMBNAIL_SEED_PATH}/#{i}.png", "#{ROUTE_THUMBNAIL_FOLDER_PATH}/#{route.id}.png")
 
     pois.each do |poi|
         poi.delete(:id)
@@ -102,4 +102,14 @@ User.all.each do |user|
             Comment.create!(user: user, moto_route: route, message: CommentsSeed::COMMENTS[type].sample)
         end
     end
+end
+
+prefix = "devel_"
+if Rails.env == "production"
+    prefix = "prod_"
+end
+
+puts "seeding route thumbnails"
+MotoRoute.all.each_with_index do |route, i|
+    route.thumbnail.attach(io: File.open("#{ROUTE_THUMBNAIL_SEED_PATH}/#{i}.png",), filename: "#{prefix}_route_thumbnail_#{route.id}.jpg")
 end
