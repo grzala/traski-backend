@@ -56,4 +56,4 @@ yarn-debug.log*
 ./exports/img/*
 !./exports/img
 
-google-credentials.json
+/google-credentials.json

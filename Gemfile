@@ -35,7 +35,7 @@ gem 'devise'
 gem 'devise-jwt'
 
 # Factories
-gem 'factory_bot_rails'
+gem 'factory_bot_rails', :require => false
 
 # Lorem Ipsum
 gem 'cryptozoologist'

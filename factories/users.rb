@@ -25,6 +25,7 @@ last_names = [
     "Rosenthal"
 ]
 
+
 FactoryBot.define do
     factory :user do
         sequence(:email, User.last.nil? ? 1 : User.last.id + 1) { |n| "test#{n}@mail.com" }

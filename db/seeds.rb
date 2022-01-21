@@ -9,6 +9,8 @@
 
 
 # unless ENV["var"]
+require 'factory_bot_rails'
+
 
 require_relative 'seeds/motoroutes.rb'
 require_relative 'seeds/comments.rb'
