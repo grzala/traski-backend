@@ -17,4 +17,8 @@ This project is a backend to the web application called Traski.pl - a platform f
 5. If you havent done it yet,  [Set up the frondend project](https://github.com/grzala/traskipl-frontend)
 6. Run `rails s`. The API will run on localhost:3001
 
+You can log by creating your own user or by loggin in as:  
+username: `testX@mail.com` where X is any number between 1 and 40
+password: `testtest` (every seeded user has the same password)
+
 
