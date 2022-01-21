@@ -117,7 +117,7 @@ class MotoRoute < ApplicationRecord
         :coordinates => self.coordinates,
         :score => self.score,
         :average_point => self.average_point,
-        :thumbnail_url => url_for(self.thumbnail)
+        :thumbnail_url => self.thumbnail.url
     })
     
     if options[:with_user]

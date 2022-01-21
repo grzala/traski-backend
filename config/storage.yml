@@ -18,7 +18,7 @@ local:
 google:
   service: GCS
   project: Traskipl
-  credentials: <%= Rails.root.join("path/to/gcs.keyfile") %>
+  credentials: <%= Rails.root.join("google-credentials.json") %>
   bucket: traski-pl
   public: true
 
