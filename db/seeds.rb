@@ -37,7 +37,7 @@ FileUtils.cp(USER_PLACEHOLDER_AVATAR_PATH, USER_AVATAR_FOLDER_PATH)
 (0...USER_COUNT).each do |i|
     user = FactoryBot.create(:user)
     added_users << user
-    FileUtils.cp("#{USER_SEED_AVATAR_PATH}/#{user.id}.png", "#{USER_AVATAR_FOLDER_PATH}/#{user.id}.png")
+    # FileUtils.cp("#{USER_SEED_AVATAR_PATH}/#{user.id}.png", "#{USER_AVATAR_FOLDER_PATH}/#{user.id}.png")
 end
 
 
@@ -111,7 +111,12 @@ if Rails.env == "production"
     prefix = "prod_"
 end
 
+puts "seeding user avatars"
+User.all.each_with_index do |user, i|
+    user.avatar.attach(io: File.open("#{USER_SEED_AVATAR_PATH}/#{user.id}.png",), filename: "#{prefix}_avatar_#{user.id}.png")
+end
+
 puts "seeding route thumbnails"
 MotoRoute.all.each_with_index do |route, i|
-    route.thumbnail.attach(io: File.open("#{ROUTE_THUMBNAIL_SEED_PATH}/#{i}.png",), filename: "#{prefix}_route_thumbnail_#{route.id}.jpg")
+    route.thumbnail.attach(io: File.open("#{ROUTE_THUMBNAIL_SEED_PATH}/#{i}.png",), filename: "#{prefix}_route_thumbnail_#{route.id}.png")
 end

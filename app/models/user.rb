@@ -16,6 +16,7 @@ class User < ApplicationRecord
   validates_length_of :first_name, minimum: 1, allow_blank: false, message: "First name cannot be empty"
   validates_length_of :last_name, minimum: 1, allow_blank: false, message: "Last name cannot be empty"
 
+  has_one_attached :avatar
 
   before_save :capitalize_name
 
@@ -29,7 +30,8 @@ class User < ApplicationRecord
 
   def serializable_hash(options={})
     to_return = super.merge ({
-        :full_name => self.full_name
+        :full_name => self.full_name,
+        :avatar_url => self.avatar.url
     })
 
     if options.key?(:include_virtual) && options[:include_virtual].include?(:total_routes_added)
