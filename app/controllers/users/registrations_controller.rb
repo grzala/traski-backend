@@ -15,15 +15,28 @@ class Users::RegistrationsController < Devise::RegistrationsController
             }, :status => 401
         end
 
-
-        avatar_path = Rails.root.join('public', 'avatars', user.id.to_s + '.png')
-        open(avatar_path, 'wb') do |file|
-            # remove file type, just use base64 data
+        begin
             file_64 = params[:profile_pic_data]
             file_64 = file_64.split(",")
             file_64 = file_64[1...file_64.length].join("")
-            file << Base64.decode64(file_64)
+            user.avatar.attach(io: StringIO.new(Base64.decode64(file_64)), filename: "#{@img_file_prefix}_avatar_#{user.id}.png")
+        rescue => error
+            puts error
+            return render json: {
+                messages: error.message,
+                field_err_msg: {}
+            }, :status => 401
         end
+
+        # REDUNDANT
+        # avatar_path = Rails.root.join('public', 'avatars', user.id.to_s + '.png')
+        # open(avatar_path, 'wb') do |file|
+        #     # remove file type, just use base64 data
+        #     file_64 = params[:profile_pic_data]
+        #     file_64 = file_64.split(",")
+        #     file_64 = file_64[1...file_64.length].join("")
+        #     file << Base64.decode64(file_64)
+        # end
 
 
         render json: {

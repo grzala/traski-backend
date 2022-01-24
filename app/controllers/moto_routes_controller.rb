@@ -215,17 +215,27 @@ class MotoRoutesController < ApplicationController
 
         if @err then raise ActiveRecord::Rollback end
 
-
         # get thumbnail from google maps api
         begin
-          thumbnail_path = Rails.root.join('public', 'route_thumbnails', @moto_route.id.to_s + '.png')
-          open(thumbnail_path, 'wb') do |file|
-            file << open(params[:google_maps_static_api_url]).read
-          end
+          @moto_route.thumbnail.attach(io: open(params[:google_maps_static_api_url]), filename: "#{@img_file_prefix}_route_thumbnail_#{@moto_route.id}.png")
         rescue => error
-          @err = true
-          @msgs << "Cannot download map thumbnail. Try again later or useless waypoints / points of interest."
+          puts error
+          return render json: {
+              messages: error.message,
+              field_err_msg: {}
+          }, :status => 401
         end
+
+        # redundant way of doing it
+        # begin
+        #   thumbnail_path = Rails.root.join('public', 'route_thumbnails', @moto_route.id.to_s + '.png')
+        #   open(thumbnail_path, 'wb') do |file|
+        #     file << open(params[:google_maps_static_api_url]).read
+        #   end
+        # rescue => error
+        #   @err = true
+        #   @msgs << "Cannot download map thumbnail. Try again later or useless waypoints / points of interest."
+        # end
 
         if @err then raise ActiveRecord::Rollback end
       end
@@ -388,17 +398,27 @@ class MotoRoutesController < ApplicationController
     end
 
     # get thumbnail from google maps api
-    # when editing, this will not rollback transaction, previous snapshot will be used
     begin
-      thumbnail_path = Rails.root.join('public', 'route_thumbnails', @moto_route.id.to_s + '.png')
-      open(thumbnail_path, 'wb') do |file|
-        file << open(params[:google_maps_static_api_url]).read
-      end
+      @moto_route.thumbnail.attach(io: open(params[:google_maps_static_api_url]), filename: "#{@img_file_prefix}_route_thumbnail_#{@moto_route.id}.png")
     rescue => error
       puts error
-      @err = true
-      @msgs << "Cannot download map thumbnail. Try again later or useless waypoints / points of interest."
+      return render json: {
+          messages: error.message,
+          field_err_msg: {}
+      }, :status => 401
     end
+
+    # REDUNDANT
+    # begin
+    #   thumbnail_path = Rails.root.join('public', 'route_thumbnails', @moto_route.id.to_s + '.png')
+    #   open(thumbnail_path, 'wb') do |file|
+    #     file << open(params[:google_maps_static_api_url]).read
+    #   end
+    # rescue => error
+    #   puts error
+    #   @err = true
+    #   @msgs << "Cannot download map thumbnail. Try again later or useless waypoints / points of interest."
+    # end
 
 
     if @err
