@@ -118,6 +118,6 @@ end
 
 puts "seeding route thumbnails"
 MotoRoute.all.each_with_index do |route, i|
-    puts "Uploading image #{i}.png with route " + route.name
-    route.thumbnail.attach(io: File.open("#{ROUTE_THUMBNAIL_SEED_PATH}/#{i}.png",), filename: "#{prefix}_route_thumbnail_#{route.id}.png")
+    puts "Uploading image #{i}.png with route #{route.id} " + route.name
+    route.thumbnail.attach(io: File.open("#{ROUTE_THUMBNAIL_SEED_PATH}/#{route.id - 1}.png",), filename: "#{prefix}_route_thumbnail_#{route.id}.png")
 end
