@@ -35,12 +35,6 @@
 /public/packs
 /public/packs-test
 
-/public/route_thumbnails/*.jpg
-/public/route_thumbnails/*.png
-/public/route_thumbnails/*.jpg
-/public/route_thumbnails/*.png
-!/public/route_thumbnails/placeholder.png
-
 /public/avatars/*.jpg
 /public/avatars/*.png
 /public/avatars/*.jpg
